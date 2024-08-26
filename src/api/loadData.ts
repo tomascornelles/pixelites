@@ -32,7 +32,7 @@ const getLeagues = async () => {
 const getKits = async (teamId) => {
   const { data, error } = await supabase
   .from('kits')
-  .select('*, team!inner(id, name, slug)')
+  .select('*, team!inner(id, name, slug, league!inner(id, name, slug, country))')
   .eq('team.slug', teamId)
   .order('year', { ascending: false });
 

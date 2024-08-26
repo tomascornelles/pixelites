@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { getKits, getTemplates } from '@api/loadData';
 import sortByName from '@services/sortByName';
@@ -7,13 +7,18 @@ import sortByName from '@services/sortByName';
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [KitComponent],
+  imports: [KitComponent, RouterModule],
   template: `
     @if (loading) {
       <article aria-busy="true">Loading</article>
     }
     @else {
-    <h2>Team: {{ teamId.toUpperCase() }}</h2>
+    <h2>
+      <a [routerLink]="['/league', kits[0]['team']['league']['slug']]">
+        &lt;
+      </a>
+      {{ kits[0]['team']['name'].toUpperCase() }}
+    </h2>
     <div class="years">
       @for (year of years; track year) {
         <article>
@@ -44,6 +49,10 @@ import sortByName from '@services/sortByName';
     }
     h3 {
       margin-block-end: 0;
+    }
+    h2 a {
+      text-decoration: none;
+      margin-inline-end: 0.5em;
     }
     @media only screen and (min-width: 768px) {
       .years {
