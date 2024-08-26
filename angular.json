@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "pico8sdb:build:production"
+              "buildTarget": "pixelites:build:production"
             },
             "development": {
-              "buildTarget": "pico8sdb:build:development"
+              "buildTarget": "pixelites:build:development"
             }
           },
           "defaultConfiguration": "development"

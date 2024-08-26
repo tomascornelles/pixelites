@@ -1,31 +1,31 @@
 {
-  "hash": "1fcc45b0",
-  "configHash": "62981f5d",
+  "hash": "36ea3784",
+  "configHash": "6f88ae3d",
   "lockfileHash": "a4bd48b7",
-  "browserHash": "169fd753",
+  "browserHash": "c77ed428",
   "optimized": {
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "3a3b93fe",
+      "fileHash": "c26de750",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "244ebf5a",
+      "fileHash": "9e6e4054",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "162a16de",
+      "fileHash": "e2862c14",
       "needsInterop": false
     },
     "@supabase/supabase-js": {
       "src": "../../../../../node_modules/@supabase/supabase-js/dist/module/index.js",
       "file": "@supabase_supabase-js.js",
-      "fileHash": "886a2b26",
+      "fileHash": "da14e3c0",
       "needsInterop": false
     }
   },

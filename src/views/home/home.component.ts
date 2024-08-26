@@ -2,9 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { getLatestKits, getTemplates } from '@api/loadData';
-import sortByYear from '@services/sortByYear';
-import sortByName from '@services/sortByName';
-import { getLayers } from '@services/getLayers';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +19,7 @@ import { getLayers } from '@services/getLayers';
         </header>
         <div class="kits">
           @for (kit of kits; track kit) {
-            <a [routerLink]="['/team', $team.slug]">
+            <a [routerLink]="['/team', kit['team']['slug']]">
               <app-kit
                 [layers]="kit"
                 [templates]="templates"
