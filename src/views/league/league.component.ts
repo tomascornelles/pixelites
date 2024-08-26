@@ -26,7 +26,7 @@ import { getLayers } from '@services/getLayers';
           <div class="kits">
             @for (kit of kits; track kit) {
               @if (kit['year'] === year) {
-                <a [routerLink]="['/team', $team.slug]">
+                <a [routerLink]="['/team', kit['team']['slug']">
                   <app-kit
                     [layers]="kit"
                     [templates]="templates"
