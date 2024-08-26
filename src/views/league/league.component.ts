@@ -81,6 +81,8 @@ export class LeagueComponent {
             this.years.push(kits[kit]['year'])
           }
         }
+
+        this.kits = this.sortByTeamName(this.kits);
         this.loading = false
       })
     });
@@ -89,6 +91,18 @@ export class LeagueComponent {
       for (let template in templates) {
         this.templates.push(templates[template])
       }
+    })
+  }
+
+  private sortByTeamName(kits) {
+    return kits.sort((a, b) => {
+      if (a['team']['name'] < b['team']['name']) {
+        return -1
+      }
+      if (a['team']['name'] > b['team']['name']) {
+        return 1
+      }
+      return 0
     })
   }
 }

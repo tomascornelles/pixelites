@@ -48,7 +48,7 @@ export class KitComponent {
     colors: [
       '',
       ['navajoWhite', 'navajoWhite', 'navajoWhite', 'peru', 'peru', 'saddleBrown'],
-      ['goldenRod', 'sienna', 'black', 'black', 'saddleBrown', '#333']
+      ['goldenRod', 'sienna', '#333', '#333', 'saddleBrown', '#333']
     ],
     templates: null,
   };
