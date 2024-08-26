@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { getLatestKits, getTemplates } from '@api/loadData';
 import sortByYear from '@services/sortByYear';
@@ -9,7 +9,7 @@ import { getLayers } from '@services/getLayers';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [KitComponent],
+  imports: [KitComponent, RouterModule],
   template: `
     @if (loading) {
       <article aria-busy="true">Loading</article>
