@@ -22,7 +22,7 @@ import { getLayers } from '@services/getLayers';
         </header>
         <div class="kits">
           @for (kit of kits; track kit) {
-            <a href="/team/{{kit['team']['slug']}}">
+            <a [routerLink]="['/team', $team.slug]">
               <app-kit
                 [layers]="kit"
                 [templates]="templates"
