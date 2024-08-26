@@ -86,12 +86,12 @@ export class KitComponent {
     if (this.layers['layer1']) {
       this.drawPixels(ctx, this.layers['layer1'], this.layers['layer1Color']);
     }
-
-    // if (colors['layers']) {
-    //   for (let i = 0; i < colors['layers'].length; i++) {
-    //     this.drawPixels(ctx, colors['layers'][i][0], colors['layers'][i][1]);
-    //   }
-    // }
+    if (this.layers['layer2']) {
+      this.drawPixels(ctx, this.layers['layer2'], this.layers['layer2Color']);
+    }
+    if (this.layers['layer3']) {
+      this.drawPixels(ctx, this.layers['layer3'], this.layers['layer3Color']);
+    }
   }
 
   private drawBorder(ctx,template) {
