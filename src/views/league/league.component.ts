@@ -9,7 +9,7 @@ import { getLayers } from '@services/getLayers';
 @Component({
   selector: 'app-league',
   standalone: true,
-  imports: [KitComponent],
+  imports: [KitComponent, RouterModule],
   template: `
     @if (loading) {
       <article aria-busy="true">Loading</article>
