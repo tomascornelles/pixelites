@@ -53,8 +53,7 @@ export class KitComponent {
     templates: null,
   };
   templateColor = Math.floor(Math.random() * 6);
-  templateBase = Math.ceil(Math.random() * 4);
-  count = 0;
+  templateBase = Math.ceil(Math.random() * 4)
 
   ngOnInit() {
     this.config.templates = this.templates;
@@ -63,6 +62,7 @@ export class KitComponent {
 
   ngAfterViewInit() {
     this.print(this.config.templates);
+    this.checkDraw();
   }
 
   private print(kit) {
@@ -75,7 +75,6 @@ export class KitComponent {
     canvas['height'] = 8 * size + 4;
     const ctx = canvas["getContext"]("2d");
     this.draw(ctx, kit.colors)
-    setTimeout(() => this.checkDraw(size, kit),500);
   }
 
   private draw(ctx, colors) {
@@ -176,17 +175,22 @@ export class KitComponent {
   private parseArray(array) {
     const rows = array.split('\n');
     const columns = rows.map(row => row.split(','));
-
     return columns;
   }
 
-  private checkDraw(size, kit) {
+  private checkDraw() {
+    const {
+      size,
+    } = this.config;
     const canvas = document.getElementById(this.canvasId);
     const ctx = canvas["getContext"]("2d");
     const colors = ctx.getImageData(size * 4, size * 4, 1, 1).data;
 
-    if (colors[3] === 0) {
-      this.print(kit);
+    if (colors[0] === 0 && colors[1] === 0 && colors[2] === 0) {
+      this.print(this.config.templates);
     }
+
+    console.log('canvas', canvas);
+    console.log('colors', colors);
   }
 }

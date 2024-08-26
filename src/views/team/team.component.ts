@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { getKits, getTemplates } from '@api/loadData';
-import sortByYear from '@services/sortByYear';
 import sortByName from '@services/sortByName';
-import { getLayers } from '@services/getLayers';
 
 @Component({
   selector: 'app-team',
@@ -81,6 +79,7 @@ export class TeamComponent {
           }
         }
         this.loading = false
+        this.kits = sortByName(this.kits);
       })
     });
 
