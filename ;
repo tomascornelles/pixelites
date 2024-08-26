@@ -88,7 +88,7 @@ import { loadData, getTeams, getLeagues } from '@api/loadData';
   }
   article button {
     display: block;
-    width: 100%;
+    width 100%;
     margin-block-end: .5rem;
     margin-inline-end: 0;
   }
