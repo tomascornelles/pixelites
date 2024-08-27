@@ -23,7 +23,7 @@ import { getTeams, getLeagues } from '@api/loadData';
           rel="next"
           (click)="toggleMenu()"
         >
-          🔍
+          <img src="search.svg" width="32">
         </span>
       </li>
     </ul>
