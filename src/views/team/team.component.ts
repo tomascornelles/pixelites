@@ -26,15 +26,17 @@ import sortByName from '@services/sortByName';
             <h3>{{year}}</h3>
           </header>
 
-          @for (kit of kits; track kit) {
-            @if (kit['year'] === year) {
-              <app-kit
-                [layers]="kit"
-                [templates]="templates"
-                [label]="kit['name']"
-              ></app-kit>
+          <div class="kits">
+            @for (kit of kits; track kit) {
+              @if (kit['year'] === year) {
+                <app-kit
+                  [layers]="kit"
+                  [templates]="templates"
+                  [label]="kit['name']"
+                ></app-kit>
+              }
             }
-          }
+          </div>
         </article>
       }
     </div>
@@ -53,6 +55,12 @@ import sortByName from '@services/sortByName';
     h2 a {
       text-decoration: none;
       margin-inline-end: 0.5em;
+    }
+    .kits {
+      display:flex;
+      flex-wrap: wrap;
+      gap: 1em;
+      justify-content: space-between;
     }
     @media only screen and (min-width: 768px) {
       .years {
