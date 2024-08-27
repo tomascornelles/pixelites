@@ -23,7 +23,7 @@ import { getTeams, getLeagues } from '@api/loadData';
           rel="next"
           (click)="toggleMenu()"
         >
-          ☰
+          🔍
         </span>
       </li>
     </ul>
@@ -36,7 +36,13 @@ import { getTeams, getLeagues } from '@api/loadData';
     <article>
       <header>
         <a (click)="toggleMenu()" aria-label="Close" rel="prev"></a>
-        <input placeholder="Search" [(ngModel)]="$search" name="search" autocomplete="off" (ngModelChange)="search($event)">
+        <input
+          placeholder="Search"
+          [(ngModel)]="$search"
+          name="search"
+          autocomplete="off"
+          (ngModelChange)="search($event)"
+        >
       </header>
 
       <div class="list">
@@ -138,6 +144,20 @@ export class NavigationComponent {
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
+    this.resetSearch();
+    if (this.isOpen) {
+      const input: HTMLInputElement = document.querySelector('input[name="search"]');
+      if (input) {
+        console.log('focus', input)
+        setTimeout(() => input.focus(), 0);
+      }
+    }
+  }
+
+  resetSearch() {
+    this.$search = '';
+    this.$filteredLeagues = this.$leagues
+    this.$filteredTeams = this.$teams
   }
 
   search($event) {
