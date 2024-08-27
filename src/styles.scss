@@ -6,10 +6,11 @@ html {
   --pico-font-family: 'Pixelify Sans', monospace;
   --pico-border-radius: 0;
 }
-dialog h3 {
-  line-height: 3rem;
-  margin-block-start: 2rem;
+#header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--pico-background-color);
+  box-shadow: var(--pico-box-shadow);
 }
-dialog button {
-  margin-inline-end: 1rem;
-}
+

@@ -8,7 +8,9 @@ import { getTeams, getLeagues } from '@api/loadData';
   standalone: true,
   imports: [RouterModule, FormsModule],
   template: `
-  <nav>
+  <nav
+    (keydown.f)="toggleMenu()"
+  >
     <a [routerLink]="['/']">
       <h1 class="title">
         Pixelites
@@ -42,6 +44,7 @@ import { getTeams, getLeagues } from '@api/loadData';
           name="search"
           autocomplete="off"
           (ngModelChange)="search($event)"
+          (keydown.enter)="selectFirstResult()"
         >
       </header>
 
@@ -117,6 +120,9 @@ import { getTeams, getLeagues } from '@api/loadData';
       margin-block-end: .5rem;
       margin-inline-end: 0;
     }
+    article button:first-of-type {
+      border: 5px solid currentColor;
+    }
     article {
       padding: 0;
       overflow-x: hidden;
@@ -168,11 +174,17 @@ export class NavigationComponent {
 
   search($event) {
     if ($event === '') {
-      this.$filteredLeagues = this.$leagues
-      this.$filteredTeams = this.$teams
+      this.$filteredLeagues = this.$leagues;;
+      this.$filteredTeams = this.$teams;
+
     } else {
       this.$filteredLeagues = this.$leagues.filter((league) => (league.name.toLowerCase().includes($event.toLowerCase()) || league.country.toLowerCase().includes($event.toLowerCase())))
       this.$filteredTeams = this.$teams.filter((team) => team.name.toLowerCase().includes($event.toLowerCase()))
     }
+  }
+
+  selectFirstResult() {
+    const button: HTMLButtonElement = document.querySelector('button:first-of-type');
+    button.click();
   }
 }

@@ -60,15 +60,7 @@ import sortByName from '@services/sortByName';
       display:flex;
       flex-wrap: wrap;
       gap: 1em;
-      justify-content: space-between;
-    }
-    @media only screen and (min-width: 768px) {
-      .years {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2em;
-        justify-content: space-between;
-      }
+      justify-content: start;
     }
   `,
 })
