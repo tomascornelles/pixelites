@@ -100,10 +100,16 @@ import { getTeams, getLeagues } from '@api/loadData';
     }
     header {
       min-height: 2.3rem;
-      padding: 2rem;
+      padding: 2rem 2rem 0;
     }
     header input {
       margin-block-start: 1rem;
+    }
+    dialog {
+      align-items: flex-start;
+    }
+    dialog h3 {
+      margin-block: 0;
     }
     article button {
       display: block;
@@ -116,7 +122,7 @@ import { getTeams, getLeagues } from '@api/loadData';
       overflow-x: hidden;
     }
     .list {
-      max-height: 50vh;
+      max-height: 70vh;
       overflow-y: auto;
       padding: 1rem;
     }
