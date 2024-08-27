@@ -54,7 +54,7 @@ const getLatestKits = async () => {
   .from('kits')
   .select('*, team!inner(id, name, slug)')
   .order('created_at', { ascending: false })
-  .limit(16);
+  .limit(24);
 
   return data || error;
 }

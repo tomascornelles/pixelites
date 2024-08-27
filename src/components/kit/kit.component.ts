@@ -27,7 +27,7 @@ type Kit = {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 7rem;
+      width: 6rem;
     }
     .label {
       text-align: center;
