@@ -149,7 +149,7 @@ export class NavigationComponent {
       const input: HTMLInputElement = document.querySelector('input[name="search"]');
       if (input) {
         console.log('focus', input)
-        setTimeout(() => input.focus(), 0);
+        setTimeout(() => input.focus(), 100);
       }
     }
   }
