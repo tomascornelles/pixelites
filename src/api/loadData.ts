@@ -1,5 +1,4 @@
 import { supabase } from '@api/supabase';
-import {reduce} from 'rxjs';
 
 const loadData = async (table: string, columns: string = '') => {
   const { data, error } = await supabase .from(table) .select(columns)
