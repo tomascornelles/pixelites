@@ -114,7 +114,13 @@ export class NewKitComponent {
       ['navajoWhite', 'navajoWhite', 'navajoWhite', 'peru', 'peru', 'saddleBrown'],
       ['goldenRod', 'sienna', '#333', '#333', 'saddleBrown', '#333']
     ],
-    colors: ['crimson', 'royalblue'],
+    colors: [
+      '#FFFFFF', '#000000', '#FF0000', '#0000FF', '#008000',
+      '#FA8072', '#DC143C', '#B22222', '#FFC0CB', '#800000',
+      '#FFFF00', '#FFD700', '#FFA500', '#FF8C00', '#FF6347',
+      '#90EE90', '#ADFF2F', '#9ACD32', '#2E8B57', '#006400',
+      '#ADD8E6', '#87CEFA', '#4169E1', '#0000CD', '#000080',
+    ],
     templates: [],
   };
   templateColor = Math.floor(Math.random() * 6);
