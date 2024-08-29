@@ -34,9 +34,14 @@ type Kit = {
       </div>
 
       <div role="group">
-        <input type="color" id="jersey" name="jersey" [(ngModel)]="kit['jersey']" (input)="setLayers()">
-        <input type="color" id="pants" name="Pants" [(ngModel)]="kit['pants']" (input)="setLayers()">
-        <input type="color" id="socks" name="Socks" [(ngModel)]="kit['socks']" (input)="setLayers()">
+        <input type="color" id="jersey" name="jersey" [(ngModel)]="kit['jersey']" (input)="setLayers()" list="colors">
+        <input type="color" id="pants" name="Pants" [(ngModel)]="kit['pants']" (input)="setLayers()" list="colors">
+        <input type="color" id="socks" name="Socks" [(ngModel)]="kit['socks']" (input)="setLayers()" list="colors">
+        <datalist id="colors">
+          @for (color of config.colors; track color) {
+            <option>{{ color }}</option>
+          }
+        </datalist>
       </div>
 
      <div role="group">
@@ -73,9 +78,9 @@ type Kit = {
       </div>
 
       <div role="group">
-        <input type="color" id="layer1Color" name="layer1Color" [(ngModel)]="kit['layer1Color']" (input)="setLayers()">
-        <input type="color" id="layer2Color" name="layer2Color" [(ngModel)]="kit['layer2Color']" (input)="setLayers()">
-        <input type="color" id="layer3Color" name="layer3Color" [(ngModel)]="kit['layer3Color']" (input)="setLayers()">
+        <input type="color" id="layer1Color" name="layer1Color" [(ngModel)]="kit['layer1Color']" (input)="setLayers()" list="colors">
+        <input type="color" id="layer2Color" name="layer2Color" [(ngModel)]="kit['layer2Color']" (input)="setLayers()" list="colors">
+        <input type="color" id="layer3Color" name="layer3Color" [(ngModel)]="kit['layer3Color']" (input)="setLayers()" list="colors">
       </div>
     </div>
   `,
@@ -104,11 +109,12 @@ export class NewKitComponent {
   canvasId = Math.random().toString(36).substring(2, 15);
   config = {
     size: 32,
-    colors: [
+    baseColors: [
       '',
       ['navajoWhite', 'navajoWhite', 'navajoWhite', 'peru', 'peru', 'saddleBrown'],
       ['goldenRod', 'sienna', '#333', '#333', 'saddleBrown', '#333']
     ],
+    colors: ['crimson', 'royalblue'],
     templates: [],
   };
   templateColor = Math.floor(Math.random() * 6);
@@ -138,7 +144,7 @@ export class NewKitComponent {
     canvas['width']= 8 * size;
     canvas['height'] = 8 * size + 4;
     const ctx = canvas["getContext"]("2d");
-    this.draw(ctx, kit.colors)
+    this.draw(ctx, kit.baseColors)
     setTimeout(() => this.checkDraw(size, kit),500);
   }
 
@@ -204,7 +210,7 @@ export class NewKitComponent {
   private drawPixels(ctx, template, customColors) {
     const {
       templates,
-      colors,
+      baseColors,
       size,
     } = this.config;
     let currentTemplate = [];
@@ -219,7 +225,7 @@ export class NewKitComponent {
     for (let y = 0; y < currentTemplate.length; y++) {
       for (let x = 0; x < currentTemplate[y].length; x++) {
         const color = template.indexOf('base') === 0
-          ? colors[currentTemplate[y][x]][this.templateColor]
+          ? baseColors[currentTemplate[y][x]][this.templateColor]
           : currentTemplate[y][x] === '0'
             ? ''
             : customColors;
