@@ -158,7 +158,9 @@ export class KitComponent {
           ? colors[currentTemplate[y][x]][this.templateColor]
           : currentTemplate[y][x] === '0'
             ? ''
-            : customColors;
+            : currentTemplate[y][x] === '0.5'
+              ? customColors + '99'
+              : customColors;
 
         if (color) {
           ctx.fillStyle = color;

@@ -122,7 +122,7 @@ type Kit = {
   `,
 })
 export class NewKitComponent {
-  kit: Kit = {
+  kitInit: Kit = {
     'name': 'home',
     'year': new Date().getFullYear(),
     'jersey': '',
@@ -135,6 +135,7 @@ export class NewKitComponent {
     'layer2Color': '',
     'layer3Color': '',
   };
+  kit = {...this.kitInit};
   templates = [];
   canvasId = Math.random().toString(36).substring(2, 15);
   config = {
@@ -169,6 +170,12 @@ export class NewKitComponent {
       }
       this.setLayers();
     });
+  }
+
+  private initKit() {
+    for (let key in this.kitInit) {
+      this.kit[key] = this.kitInit[key];
+    }
   }
 
   public setLayers() {
@@ -272,7 +279,6 @@ export class NewKitComponent {
               ? customColors + '99'
               : customColors;
 
-              console.log('color', color)
         if (color) {
           ctx.fillStyle = color;
           ctx.fillRect(size * x +2, size * y +2, size, size);
@@ -304,6 +310,8 @@ export class NewKitComponent {
   }
 
   public save() {
-    console.log(saveKit(this.kit));
+    saveKit(this.kit);
+    this.kit = {...this.kitInit};
+    this.setLayers();
   }
 }
