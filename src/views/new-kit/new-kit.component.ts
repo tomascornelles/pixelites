@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { KitComponent } from '@components/kit/kit.component';
-import { getKits, getTemplates } from '@api/loadData';
+import { getAllTeams, getTemplates, saveKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
 
 type Kit = {
@@ -82,6 +82,31 @@ type Kit = {
         <input type="color" id="layer2Color" name="layer2Color" [(ngModel)]="kit['layer2Color']" (input)="setLayers()" list="colors">
         <input type="color" id="layer3Color" name="layer3Color" [(ngModel)]="kit['layer3Color']" (input)="setLayers()" list="colors">
       </div>
+
+      <div>
+        <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team">
+        <datalist id="teams">
+          @for (team of $teams; track team) {
+            <option value="{{ team['id'] }}">{{ team['name'] }}</option>
+          }
+        </datalist>
+      </div>
+
+      <div role="group">
+        <select name="name" id="name" [(ngModel)]="kit['name']">
+          <option value="home">Home</option>
+          <option value="home alt">Home alt</option>
+          <option value="away">Away</option>
+          <option value="third">Third</option>
+          <option value="fourth">Fourth</option>
+          <option value="special">Special</option>
+        </select>
+        <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
+      </div>
+
+      <div>
+        <button type="button" (click)="save()">Save</button>
+      </div>
     </div>
   `,
   styles: `
@@ -89,12 +114,17 @@ type Kit = {
       display: flex;
       justify-content: center;
     }
+
+    button {
+      display: block;
+      width: 100%;
+    }
   `,
 })
 export class NewKitComponent {
   kit: Kit = {
-    'name': '',
-    'year': null,
+    'name': 'home',
+    'year': new Date().getFullYear(),
     'jersey': '',
     'pants': '',
     'socks': '',
@@ -125,8 +155,14 @@ export class NewKitComponent {
   };
   templateColor = Math.floor(Math.random() * 6);
   templateBase = Math.ceil(Math.random() * 4);
+  $teams = [];
 
   ngOnInit() {
+    getAllTeams().then((teams) => {
+      for (let team in teams) {
+        this.$teams.push(teams[team]);
+      }
+    })
     getTemplates().then((templates) => {
       for (let template in templates) {
         this.config.templates.push(templates[template]);
@@ -136,8 +172,6 @@ export class NewKitComponent {
   }
 
   public setLayers() {
-    this.kit['name'] = 'Test';
-    this.kit['year'] = 2024;
     this.print(this.kit)
   }
 
@@ -264,5 +298,9 @@ export class NewKitComponent {
     if (colors[3] === 0) {
       this.print(kit);
     }
+  }
+
+  public save() {
+    console.log(saveKit(this.kit));
   }
 }
