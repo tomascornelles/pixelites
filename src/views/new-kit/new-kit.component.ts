@@ -23,7 +23,7 @@ type Kit = {
   imports: [KitComponent, FormsModule],
   template: `
     <div class="kit-form">
-      <canvas [attr.id]="canvasId" height="260"></canvas>
+      <canvas [attr.id]="canvasId" height="132"></canvas>
     </div>
 
     <div class="form">
@@ -138,7 +138,7 @@ export class NewKitComponent {
   templates = [];
   canvasId = Math.random().toString(36).substring(2, 15);
   config = {
-    size: 32,
+    size: 16,
     baseColors: [
       '',
       ['navajoWhite', 'navajoWhite', 'navajoWhite', 'peru', 'peru', 'saddleBrown'],
@@ -268,8 +268,11 @@ export class NewKitComponent {
           ? baseColors[currentTemplate[y][x]][this.templateColor]
           : currentTemplate[y][x] === '0'
             ? ''
-            : customColors;
+            : currentTemplate[y][x] === '0.5'
+              ? customColors + '99'
+              : customColors;
 
+              console.log('color', color)
         if (color) {
           ctx.fillStyle = color;
           ctx.fillRect(size * x +2, size * y +2, size, size);
