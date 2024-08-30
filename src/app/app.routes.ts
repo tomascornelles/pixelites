@@ -23,6 +23,10 @@ export const routes: Routes = [
     component: NewKitComponent,
   },
   {
+    path: 'new-kit/:id',
+    component: NewKitComponent,
+  },
+  {
     path: '404',
     component: Error404Component,
   },

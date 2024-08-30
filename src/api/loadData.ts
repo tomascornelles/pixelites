@@ -74,12 +74,28 @@ const getTemplates = async () => {
   return data || error;
 }
 
+const getKit = async (id) => {
+  const { data, error } = await supabase
+  .from('kits')
+  .select('*')
+  .eq('id', id);
+
+  return data || error;
+}
+
 const saveKit = async (kit) => {
   const { data, error } = await supabase
   .from('kits')
   .insert(kit);
 
   return data || error;
+}
+
+const updateKit = async (kit) => {
+  const { data, error } = await supabase
+  .from('kits')
+  .update(kit)
+  .eq('id', kit.id);
 }
 
 const reduceData = async (data, key: string) => {
@@ -113,5 +129,7 @@ export {
   getLatestKits,
   getTemplates,
   getAllTeams,
+  getKit,
   saveKit,
+  updateKit,
 };

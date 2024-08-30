@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
-import { getAllTeams, getTemplates, saveKit } from '@api/loadData';
+import { getAllTeams, getTemplates, saveKit, getKit, updateKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
 
 type Kit = {
@@ -20,94 +21,101 @@ type Kit = {
 @Component({
   selector: 'app-new-kit',
   standalone: true,
-  imports: [KitComponent, FormsModule],
+  imports: [KitComponent, FormsModule, RouterModule],
   template: `
-    <div class="kit-form">
-      <canvas [attr.id]="canvasId" height="132"></canvas>
-    </div>
+    @if (loading) {
+      <article aria-busy="true">Loading</article>
+    }
+    @else {
+      <article>
+        <div class="kit-form">
+          <canvas [attr.id]="canvasId" height="132"></canvas>
+        </div>
 
-    <div class="form">
-      <div role="group">
-        <label for="jersey">Jersey</label>
-        <label for="pants">Pants</label>
-        <label for="socks">Socks</label>
-      </div>
+        <div class="form">
+          <div role="group">
+            <label for="jersey">Jersey</label>
+            <label for="pants">Pants</label>
+            <label for="socks">Socks</label>
+          </div>
 
-      <div role="group">
-        <input type="color" id="jersey" name="jersey" [(ngModel)]="kit['jersey']" (input)="setLayers()" list="colors">
-        <input type="color" id="pants" name="Pants" [(ngModel)]="kit['pants']" (input)="setLayers()" list="colors">
-        <input type="color" id="socks" name="Socks" [(ngModel)]="kit['socks']" (input)="setLayers()" list="colors">
-        <datalist id="colors">
-          @for (color of config.colors; track color) {
-            <option>{{ color }}</option>
-          }
-        </datalist>
-      </div>
+          <div role="group">
+            <input type="color" id="jersey" name="jersey" [(ngModel)]="kit['jersey']" (input)="setLayers()" list="colors">
+            <input type="color" id="pants" name="Pants" [(ngModel)]="kit['pants']" (input)="setLayers()" list="colors">
+            <input type="color" id="socks" name="Socks" [(ngModel)]="kit['socks']" (input)="setLayers()" list="colors">
+            <datalist id="colors">
+              @for (color of config.colors; track color) {
+                <option>{{ color }}</option>
+              }
+            </datalist>
+          </div>
 
-     <div role="group">
-        <label for="layer1">Layer 1</label>
-        <label for="layer2">Layer 2</label>
-        <label for="layer3">Layer 3</label>
-      </div>
+         <div role="group">
+            <label for="layer1">Layer 1</label>
+            <label for="layer2">Layer 2</label>
+            <label for="layer3">Layer 3</label>
+          </div>
 
-      <div role="group">
-        <select name="layer1" id="layer1" [(ngModel)]="kit['layer1']" (change)="setLayers()">
-          <option value=""></option>
-          @for (template of config.templates; track template) {
-            @if (template['type'] === 'layer') {
-              <option value="{{ template['id'] }}">{{ template['id'] }}</option>
-            }
-          }
-        </select>
-        <select name="layer2" id="layer2" [(ngModel)]="kit['layer2']" (change)="setLayers()">
-          <option value=""></option>
-          @for (template of config.templates; track template) {
-            @if (template['type'] === 'layer') {
-              <option value="{{ template['id'] }}">{{ template['id'] }}</option>
-            }
-          }
-        </select>
-        <select name="layer3" id="layer3" [(ngModel)]="kit['layer3']" (change)="setLayers()">
-          <option value=""></option>
-          @for (template of config.templates; track template) {
-            @if (template['type'] === 'layer') {
-              <option value="{{ template['id'] }}">{{ template['id'] }}</option>
-            }
-          }
-        </select>
-      </div>
+          <div role="group">
+            <select name="layer1" id="layer1" [(ngModel)]="kit['layer1']" (change)="setLayers()">
+              <option value=""></option>
+              @for (template of config.templates; track template) {
+                @if (template['type'] === 'layer') {
+                  <option value="{{ template['id'] }}">{{ template['id'] }}</option>
+                }
+              }
+            </select>
+            <select name="layer2" id="layer2" [(ngModel)]="kit['layer2']" (change)="setLayers()">
+              <option value=""></option>
+              @for (template of config.templates; track template) {
+                @if (template['type'] === 'layer') {
+                  <option value="{{ template['id'] }}">{{ template['id'] }}</option>
+                }
+              }
+            </select>
+            <select name="layer3" id="layer3" [(ngModel)]="kit['layer3']" (change)="setLayers()">
+              <option value=""></option>
+              @for (template of config.templates; track template) {
+                @if (template['type'] === 'layer') {
+                  <option value="{{ template['id'] }}">{{ template['id'] }}</option>
+                }
+              }
+            </select>
+          </div>
 
-      <div role="group">
-        <input type="color" id="layer1Color" name="layer1Color" [(ngModel)]="kit['layer1Color']" (input)="setLayers()" list="colors">
-        <input type="color" id="layer2Color" name="layer2Color" [(ngModel)]="kit['layer2Color']" (input)="setLayers()" list="colors">
-        <input type="color" id="layer3Color" name="layer3Color" [(ngModel)]="kit['layer3Color']" (input)="setLayers()" list="colors">
-      </div>
+          <div role="group">
+            <input type="color" id="layer1Color" name="layer1Color" [(ngModel)]="kit['layer1Color']" (input)="setLayers()" list="colors">
+            <input type="color" id="layer2Color" name="layer2Color" [(ngModel)]="kit['layer2Color']" (input)="setLayers()" list="colors">
+            <input type="color" id="layer3Color" name="layer3Color" [(ngModel)]="kit['layer3Color']" (input)="setLayers()" list="colors">
+          </div>
 
-      <div>
-        <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team">
-        <datalist id="teams">
-          @for (team of $teams; track team) {
-            <option value="{{ team['id'] }}">{{ team['name'] }}</option>
-          }
-        </datalist>
-      </div>
+          <div>
+            <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team">
+            <datalist id="teams">
+              @for (team of $teams; track team) {
+                <option value="{{ team['id'] }}">{{ team['name'] }}</option>
+              }
+            </datalist>
+          </div>
 
-      <div role="group">
-        <select name="name" id="name" [(ngModel)]="kit['name']">
-          <option value="home">Home</option>
-          <option value="home alt">Home alt</option>
-          <option value="away">Away</option>
-          <option value="third">Third</option>
-          <option value="fourth">Fourth</option>
-          <option value="special">Special</option>
-        </select>
-        <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
-      </div>
+          <div role="group">
+            <select name="name" id="name" [(ngModel)]="kit['name']">
+              <option value="home">Home</option>
+              <option value="home alt">Home alt</option>
+              <option value="away">Away</option>
+              <option value="third">Third</option>
+              <option value="fourth">Fourth</option>
+              <option value="special">Special</option>
+            </select>
+            <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
+          </div>
 
-      <div>
-        <button type="button" (click)="save()">Save</button>
-      </div>
-    </div>
+          <div>
+            <button type="button" (click)="save()">Save</button>
+          </div>
+        </div>
+      </article>
+    }
   `,
   styles: `
     .kit-form {
@@ -157,6 +165,10 @@ export class NewKitComponent {
   templateColor = Math.floor(Math.random() * 6);
   templateBase = Math.ceil(Math.random() * 4);
   $teams = [];
+  $id = null;
+  loading = true;
+
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     getAllTeams().then((teams) => {
@@ -168,7 +180,21 @@ export class NewKitComponent {
       for (let template in templates) {
         this.config.templates.push(templates[template]);
       }
-      this.setLayers();
+
+      this.route.params.subscribe((params) => {
+        this.$id = params['id'];
+        if (this.$id) {
+          getKit(this.$id).then((kits) => {
+            for (let kit in kits) {
+              this.kit = kits[kit];
+            }
+          })
+        } else {
+          this.initKit();
+        }
+        this.loading = false;
+        this.setLayers();
+      });
     });
   }
 
@@ -179,7 +205,9 @@ export class NewKitComponent {
   }
 
   public setLayers() {
-    this.print(this.kit)
+    setTimeout(() => {
+      this.print(this.kit);
+    }, 500);
   }
 
   private print(kit) {
@@ -310,8 +338,18 @@ export class NewKitComponent {
   }
 
   public save() {
-    saveKit(this.kit);
-    this.kit = {...this.kitInit};
-    this.setLayers();
+    this.loading = true;
+    if (this.$id) {
+      updateKit(this.kit).then(() => {
+        this.loading = false;
+        this.setLayers();
+      });
+    } else {
+      saveKit(this.kit).then(() => {
+        this.loading = false;
+        this.initKit();
+        this.setLayers();
+      });
+    }
   }
 }
