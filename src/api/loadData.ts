@@ -17,7 +17,8 @@ const getTeams = async () => {
 const getLeagues = async () => {
   const { data, error } = await supabase
   .from('kits')
-  .select('team!inner(id, name, slug, league!inner(id, name, slug, country))');
+  .select('team!inner(id, name, slug, league!inner(id, name, slug, country))')
+  .eq('name', 'home');
   // .from('teams')
   // .select('league!inner(id, name, slug, country)')
   let leagues;
