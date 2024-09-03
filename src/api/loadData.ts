@@ -106,6 +106,13 @@ const updateKit = async (kit) => {
   .eq('id', kit.id);
 }
 
+const deleteKit = async (id) => {
+  const { data, error } = await supabase
+  .from('kits')
+  .delete()
+  .eq('id', id);
+}
+
 const reduceData = async (data, key: string) => {
   const filteredData = {};
   const reducedData = [];
@@ -140,4 +147,5 @@ export {
   getKit,
   saveKit,
   updateKit,
+  deleteKit,
 };

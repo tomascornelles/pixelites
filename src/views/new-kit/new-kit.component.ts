@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
-import { getAllTeams, getTemplates, saveKit, getKit, updateKit } from '@api/loadData';
+import { getAllTeams, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
 
 type Kit = {
@@ -28,6 +28,18 @@ type Kit = {
     }
     @else {
       <article>
+        @if ($id) {
+          <h2>Edit Kit</h2>
+          <div role="group">
+            <a [routerLink]="['/new-kit']">
+              Create a new kit
+            </a>
+          </div>
+        }
+        @else {
+          <h2>New Kit</h2>
+        }
+
         <div class="kit-form">
           <canvas [attr.id]="canvasId" height="132"></canvas>
         </div>
@@ -110,12 +122,33 @@ type Kit = {
             <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
           </div>
 
-          <div>
+          <div role="group">
             <button type="button" (click)="save()">Save</button>
+            @if (this.$id) {
+              <button type="button" (click)="wantDelete = !wantDelete" class="secondary">Delete</button>
+            }
           </div>
         </div>
       </article>
     }
+    <dialog
+    [open]="wantDelete"
+    >
+      <article>
+        <header>
+          <h1>Want to delete?</h1>
+        </header>
+        <div>
+          <p>Are you sure you want to delete this kit?</p>
+        </div>
+        <footer>
+          <div role="group">
+            <button type="button" (click)="wantDelete = !wantDelete">Cancel</button>
+            <button type="button" (click)="delete()" class="secondary">Delete</button>
+          </div>
+        </footer>
+      </article>
+    </dialog>
   `,
   styles: `
     .kit-form {
@@ -167,6 +200,7 @@ export class NewKitComponent {
   $teams = [];
   $id = null;
   loading = true;
+  wantDelete = false;
 
   constructor(private route: ActivatedRoute, public router: Router) { }
 
@@ -353,5 +387,13 @@ export class NewKitComponent {
         this.router.navigate(['/update-kit', data[0].id]);
       });
     }
+  }
+
+  public delete() {
+    this.loading = true;
+    deleteKit(this.$id).then(() => {
+      this.loading = false;
+      this.router.navigate(['/new-kit']);
+    });
   }
 }
