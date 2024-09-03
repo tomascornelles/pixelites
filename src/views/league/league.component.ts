@@ -12,7 +12,7 @@ import { getLeagueKits, getTemplates } from '@api/loadData';
       <article aria-busy="true">Loading</article>
     }
     @else {
-    <h2>Group: {{ leagueId.toUpperCase() }}</h2>
+    <h2>{{ leagueId.toUpperCase() }}</h2>
     <div class="years">
       @for (year of years; track year) {
         <article>

@@ -60,7 +60,10 @@ import { getTeams, getLeagues } from '@api/loadData';
             [routerLink]="['/league', $league.slug]"
             (click)="toggleMenu()"
           >
-            {{ $league.name }} ({{ $league.country }})
+            {{ $league.name }}
+            @if ($league.country) {
+              ({{ $league.country }})
+            }
           </button>
         }
 
@@ -160,7 +163,6 @@ export class NavigationComponent {
     if (this.isOpen) {
       const input: HTMLInputElement = document.querySelector('input[name="search"]');
       if (input) {
-        console.log('focus', input)
         setTimeout(() => input.focus(), 100);
       }
     }

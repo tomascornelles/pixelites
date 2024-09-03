@@ -17,22 +17,28 @@ const getTeams = async () => {
 const getLeagues = async () => {
   const { data, error } = await supabase
   .from('kits')
-  .select('team!inner(id, name, slug, league!inner(id, name, slug, country))')
-  .eq('name', 'home');
-  // .from('teams')
-  // .select('league!inner(id, name, slug, country)')
-  let leagues;
-  await reduceData(data, 'team').then((teams) => {
-    leagues = reduceData(teams, 'league');
-  });
+  .select('competition!inner(id, name, slug, country))')
 
-  return leagues || error;
+  let competitions = {};
+  const result = [];
+
+  data.forEach(kit => {
+    if (!competitions[kit['competition'].id]) {
+      competitions[kit['competition'].id] = kit['competition'];
+    }
+  })
+
+  for (let competition in competitions) {
+    result.push(competitions[competition])
+  }
+
+  return result || error;
 }
 
 const getKits = async (teamId) => {
   const { data, error } = await supabase
   .from('kits')
-  .select('*, team!inner(id, name, slug, league!inner(id, name, slug, country))')
+  .select('*, team!inner(id, name, slug), competition!inner(id, name, slug, country)')
   .eq('team.slug', teamId)
   .order('year', { ascending: false });
 
@@ -42,8 +48,8 @@ const getKits = async (teamId) => {
 const getLeagueKits = async (leagueId) => {
   const { data, error } = await supabase
   .from('kits')
-  .select('*, team!inner(id, name, slug, league!inner(id, name, slug, country))')
-  .eq('team.league.slug', leagueId)
+  .select('*, team!inner(id, name, slug), competition!inner(id, name, slug, country)')
+  .eq('competition.slug', leagueId)
   .order('year', { ascending: false });
 
   return data || error;
