@@ -57,7 +57,7 @@ import { getTeams, getLeagues } from '@api/loadData';
         @for ($league of $filteredLeagues; track $league.id) {
           <button
             class="outline"
-            [routerLink]="['/league', $league.slug]"
+            [routerLink]="['/competition', $league.slug]"
             (click)="toggleMenu()"
           >
             {{ $league.name }}

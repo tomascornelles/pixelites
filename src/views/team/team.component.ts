@@ -14,7 +14,7 @@ import sortByName from '@services/sortByName';
     }
     @else {
     <h2>
-      <a [routerLink]="['/league', kits[0]['competition']['slug']]">
+      <a [routerLink]="['/competition', kits[0]['competition']['slug']]">
         &lt;
       </a>
       {{ kits[0]['team']['name'].toUpperCase() }}

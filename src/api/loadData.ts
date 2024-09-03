@@ -93,7 +93,8 @@ const getKit = async (id) => {
 const saveKit = async (kit) => {
   const { data, error } = await supabase
   .from('kits')
-  .insert(kit);
+  .insert(kit)
+  .select();
 
   return data || error;
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { getAllTeams, getTemplates, saveKit, getKit, updateKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
@@ -168,7 +168,7 @@ export class NewKitComponent {
   $id = null;
   loading = true;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, public router: Router) { }
 
   ngOnInit() {
     getAllTeams().then((teams) => {
@@ -345,10 +345,12 @@ export class NewKitComponent {
         this.setLayers();
       });
     } else {
-      saveKit(this.kit).then(() => {
+      saveKit(this.kit).then((data) => {
         this.loading = false;
         this.initKit();
         this.setLayers();
+        console.log('data', data[0].id);
+        this.router.navigate(['/update-kit', data[0].id]);
       });
     }
   }

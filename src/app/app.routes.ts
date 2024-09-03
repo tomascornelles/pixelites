@@ -11,7 +11,7 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'league/:id',
+    path: 'competition/:id',
     component: LeagueComponent,
   },
   {
@@ -23,7 +23,7 @@ export const routes: Routes = [
     component: NewKitComponent,
   },
   {
-    path: 'new-kit/:id',
+    path: 'update-kit/:id',
     component: NewKitComponent,
   },
   {
