@@ -133,15 +133,15 @@ export class NewKitComponent {
   kitInit: Kit = {
     'name': 'home',
     'year': new Date().getFullYear(),
-    'jersey': '',
-    'pants': '',
-    'socks': '',
+    'jersey': '#FFFFFF',
+    'pants': '#FFFFFF',
+    'socks': '#FFFFFF',
     'layer1': '',
     'layer2': '',
     'layer3': '',
-    'layer1Color': '',
-    'layer2Color': '',
-    'layer3Color': '',
+    'layer1Color': '#FFFFFF',
+    'layer2Color': '#FFFFFF',
+    'layer3Color': '#FFFFFF',
   };
   kit = {...this.kitInit};
   templates = [];
