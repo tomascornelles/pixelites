@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
-import { getAllTeams, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
+import { getAllTeams, getAllCompetitions, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
 
 type Kit = {
@@ -101,11 +101,18 @@ type Kit = {
             <input type="color" id="layer3Color" name="layer3Color" [(ngModel)]="kit['layer3Color']" (input)="setLayers()" list="colors">
           </div>
 
-          <div>
+          <div role="group">
             <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team">
             <datalist id="teams">
               @for (team of $teams; track team) {
                 <option value="{{ team['id'] }}">{{ team['name'] }}</option>
+              }
+            </datalist>
+
+            <input type="text" id="competition" name="competition" [(ngModel)]="kit['competition']" list="competitions" placeholder="Competition">
+            <datalist id="competitions">
+              @for (competition of $competitions; track competition) {
+                <option value="{{ competition['id'] }}">{{ competition['name'] }}</option>
               }
             </datalist>
           </div>
@@ -198,6 +205,7 @@ export class NewKitComponent {
   templateColor = Math.floor(Math.random() * 6);
   templateBase = Math.ceil(Math.random() * 4);
   $teams = [];
+  $competitions = [];
   $id = null;
   loading = true;
   wantDelete = false;
@@ -209,7 +217,14 @@ export class NewKitComponent {
       for (let team in teams) {
         this.$teams.push(teams[team]);
       }
-    })
+    });
+
+    getAllCompetitions().then((competitions) => {
+      for (let competition in competitions) {
+        this.$competitions.push(competitions[competition]);
+      }
+    });
+
     getTemplates().then((templates) => {
       for (let template in templates) {
         this.config.templates.push(templates[template]);

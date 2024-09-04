@@ -63,6 +63,14 @@ const getAllTeams = async () => {
   return data || error;
 }
 
+const getAllCompetitions = async () => {
+  const { data, error } = await supabase
+  .from('leagues')
+  .select('*');
+
+  return data || error;
+}
+
 const getLatestKits = async () => {
   const { data, error } = await supabase
   .from('kits')
@@ -168,6 +176,7 @@ export {
   getLatestKits,
   getTemplates,
   getAllTeams,
+  getAllCompetitions,
   getKit,
   saveKit,
   updateKit,
