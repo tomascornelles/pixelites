@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { getTeams, getLeagues } from '@api/loadData';
+import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
 
 @Component({
   selector: 'app-navigation',
@@ -14,6 +14,11 @@ import { getTeams, getLeagues } from '@api/loadData';
     <a [routerLink]="['/']">
       <h1 class="title">
         Pixelites
+        @if ($countTeams > 0 && $countKits > 0) {
+          <small>
+            {{ $countTeams }} teams with {{ $countKits }} kits
+          </small>
+        }
       </h1>
     </a>
 
@@ -90,8 +95,17 @@ import { getTeams, getLeagues } from '@api/loadData';
       margin-block-end: 3rem;
     }
     .title {
-      font-size: 1.5rem;
       margin-block-start: 1rem;
+      font-size: 2rem;
+      background: linear-gradient(to top right, darkgreen 0%, #a5d601 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .title small {
+      display: block;
+      font-size: .5em;
+      font-weight: 400;
+      color: #999;
     }
     .menu-toggle {
       font-size: 2.4rem;
@@ -145,15 +159,26 @@ export class NavigationComponent {
   $filteredTeams = [];
   $search = '';
   isOpen = false;
+  $countKits = 0;
+  $countTeams = 0;
 
   ngOnInit() {
     getLeagues().then((leagues) => {
       this.$leagues = leagues;
       this.$filteredLeagues = this.$leagues
     })
+
     getTeams().then((teams) => {
       this.$teams = teams;
       this.$filteredTeams = this.$teams
+    })
+
+    countKits().then((count) => {
+      this.$countKits = +count
+    })
+
+    countTeams().then((count) => {
+      this.$countTeams = +count
     })
   }
 

@@ -14,11 +14,15 @@ import sortByName from '@services/sortByName';
     }
     @else {
     <h2>
-      <a [routerLink]="['/competition', kits[0]['competition']['slug']]">
-        &lt;
-      </a>
       {{ kits[0]['team']['name'].toUpperCase() }}
     </h2>
+    <p class="competitions">
+      @for (competition of competitions; track competition) {
+        <a [routerLink]="['/competition', competition['slug']]">
+          {{ competition['name'] }}
+        </a>
+      }
+    </p>
     <div class="years">
       @for (year of years; track year) {
         <article>
@@ -62,6 +66,11 @@ import sortByName from '@services/sortByName';
       gap: 1em;
       justify-content: start;
     }
+    .competitions {
+      display: flex;
+      gap: 1em;
+      margin-block-end: 1em;
+    }
   `,
 })
 
@@ -71,6 +80,7 @@ export class TeamComponent {
   templates = [];
   years = [];
   loading = true;
+  competitions = [];
 
   constructor(private route: ActivatedRoute) { }
 
@@ -80,13 +90,21 @@ export class TeamComponent {
       this.teamId = params['id'];
       this.kits = [];
       this.years = [];
+      this.competitions = [];
+      const allCompetitions = {};
       getKits(this.teamId).then((kits) => {
         for (let kit in kits) {
           this.kits.push(kits[kit])
           if (!this.years.includes(kits[kit]['year'])) {
             this.years.push(kits[kit]['year'])
           }
+
+          if (!allCompetitions[kits[kit]['competition'].id]) {
+            allCompetitions[kits[kit]['competition'].id] = kits[kit]['competition'];
+            this.competitions.push(kits[kit]['competition']);
+          }
         }
+
         this.loading = false
         this.kits = sortByName(this.kits);
       })

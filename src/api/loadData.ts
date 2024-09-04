@@ -113,6 +113,30 @@ const deleteKit = async (id) => {
   .eq('id', id);
 }
 
+const countKits = async (key = '', value = '') => {
+  const { count, error } = await supabase
+  .from('kits')
+  .select('*', { count: 'exact'})
+  // .eq(key, value);
+
+  return count || error;
+}
+
+const countTeams = async (key = '', value = '') => {
+  const teams = [];
+  const { data, count,  error } = await supabase
+  .from('kits')
+  .select('team')
+
+  for (let team in data) {
+    if (!teams.includes(data[team]['team'])) {
+      teams.push(data[team]['team'])
+    }
+  }
+
+  return teams.length || error;
+}
+
 const reduceData = async (data, key: string) => {
   const filteredData = {};
   const reducedData = [];
@@ -148,4 +172,6 @@ export {
   saveKit,
   updateKit,
   deleteKit,
+  countKits,
+  countTeams,
 };
