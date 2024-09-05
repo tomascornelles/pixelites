@@ -41,7 +41,7 @@ import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
   >
     <article>
       <header>
-        <a (click)="toggleMenu()" aria-label="Close" rel="prev"></a>
+        <span class="close" (click)="toggleMenu()" aria-label="Close" rel="prev"></span>
         <input
           placeholder="Search"
           [(ngModel)]="$search"
@@ -109,6 +109,9 @@ import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
     .menu-toggle {
       font-size: 2.4rem;
       line-height: 1rem;
+      cursor: pointer;
+    }
+    .close {
       cursor: pointer;
     }
     nav a {
