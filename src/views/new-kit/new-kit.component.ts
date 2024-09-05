@@ -31,7 +31,7 @@ type Kit = {
         @if ($id) {
           <h2>Edit Kit</h2>
           <div role="group">
-            <a [routerLink]="['/new-kit']">
+            <a [routerLink]="['/kit/new']">
               Create a new kit
             </a>
           </div>
@@ -399,7 +399,7 @@ export class NewKitComponent {
         this.initKit();
         this.setLayers();
         console.log('data', data[0].id);
-        this.router.navigate(['/update-kit', data[0].id]);
+        this.router.navigate(['/kit/update', data[0].id]);
       });
     }
   }
@@ -408,7 +408,7 @@ export class NewKitComponent {
     this.loading = true;
     deleteKit(this.$id).then(() => {
       this.loading = false;
-      this.router.navigate(['/new-kit']);
+      this.router.navigate(['/kit/new']);
     });
   }
 }

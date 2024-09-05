@@ -97,7 +97,7 @@ import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
     .title {
       margin-block-start: 1rem;
       font-size: 2rem;
-      background: linear-gradient(to top right, darkgreen 0%, #a5d601 100%);
+      background: linear-gradient(to bottom right, var(--pico-primary-hover-background) 0%, var(--pico-primary-hover) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }

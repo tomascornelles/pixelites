@@ -19,11 +19,11 @@ export const routes: Routes = [
     component: TeamComponent,
   },
   {
-    path: 'new-kit',
+    path: 'kit/new',
     component: NewKitComponent,
   },
   {
-    path: 'update-kit/:id',
+    path: 'kit/update/:id',
     component: NewKitComponent,
   },
   {
