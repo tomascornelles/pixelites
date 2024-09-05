@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { LoginComponent } from '@views/login/login.component';
+import { isLogged } from '@services/login';
 import { getAllTeams, getAllCompetitions, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
 
@@ -25,7 +26,7 @@ type Kit = {
   imports: [KitComponent, FormsModule, RouterModule, LoginComponent],
   template: `
     @if (!$isLoggedIn) {
-      <app-login (loggedIn)="isLogged()"></app-login>
+      <app-login (loggedIn)="init()"></app-login>
     }
     @else if (loading) {
       <article aria-busy="true">Loading</article>
@@ -172,6 +173,7 @@ type Kit = {
     button {
       display: block;
       width: 100%;
+      flex-grow: 1;
     }
   `,
 })
@@ -221,52 +223,45 @@ export class NewKitComponent {
   constructor(private route: ActivatedRoute, public router: Router) { }
 
   ngOnInit() {
-    this.isLogged();
-
-    if (this.$isLoggedIn) {
-      this.init();
-    }
+    this.init();
   }
 
-  private init() {
-    getAllTeams().then((teams) => {
-      for (let team in teams) {
-        this.$teams.push(teams[team]);
-      }
-    });
-
-    getAllCompetitions().then((competitions) => {
-      for (let competition in competitions) {
-        this.$competitions.push(competitions[competition]);
-      }
-    });
-
-    getTemplates().then((templates) => {
-      for (let template in templates) {
-        this.config.templates.push(templates[template]);
-      }
-
-      this.route.params.subscribe((params) => {
-        this.$id = params['id'];
-        if (this.$id) {
-          getKit(this.$id).then((kits) => {
-            for (let kit in kits) {
-              this.kit = kits[kit];
-            }
-          })
-        } else {
-          this.initKit();
-        }
-        this.loading = false;
-        this.setLayers();
-      });
-    });
-  }
-
-  public isLogged() {
-    if (typeof window !== 'undefined' && window.sessionStorage.getItem('user')) {
+  public init() {
+    if (isLogged()) {
       this.$isLoggedIn = true;
-      this.init();
+
+      getAllTeams().then((teams) => {
+        for (let team in teams) {
+          this.$teams.push(teams[team]);
+        }
+      });
+
+      getAllCompetitions().then((competitions) => {
+        for (let competition in competitions) {
+          this.$competitions.push(competitions[competition]);
+        }
+      });
+
+      getTemplates().then((templates) => {
+        for (let template in templates) {
+          this.config.templates.push(templates[template]);
+        }
+
+        this.route.params.subscribe((params) => {
+          this.$id = params['id'];
+          if (this.$id) {
+            getKit(this.$id).then((kits) => {
+              for (let kit in kits) {
+                this.kit = kits[kit];
+              }
+            })
+          } else {
+            this.initKit();
+          }
+          this.loading = false;
+          this.setLayers();
+        });
+      });
     }
   }
 

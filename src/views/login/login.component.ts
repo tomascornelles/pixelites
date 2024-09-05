@@ -12,6 +12,9 @@ import { FormsModule } from '@angular/forms';
       <header>
         <h1>Login</h1>
       </header>
+      @if ($error) {
+        <p>{{ $error }}</p>
+      }
       <input type="text" [(ngModel)]="$user" placeholder="email">
       <input type="password" [(ngModel)]="$password" placeholder="password">
       <button type="button" (click)="login()">Login</button>
@@ -21,6 +24,7 @@ import { FormsModule } from '@angular/forms';
 export class LoginComponent {
   $user = '';
   $password = '';
+  $error = '';
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
   constructor(private router: Router) { }
@@ -29,8 +33,7 @@ export class LoginComponent {
     login(this.$user, this.$password).then((data) => {
       console.log('data', data[0]);
       if (typeof data[0] === 'undefined' || !data[0]) {
-        console.log('no data');
-        this.router.navigate(['/']);
+        this.$error = 'Login failed';
       } else {
         window.sessionStorage.setItem('user', JSON.stringify(data[0]));
         this.loggedIn.emit(data[0]);
