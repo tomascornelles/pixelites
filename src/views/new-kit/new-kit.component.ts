@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 
 type Kit = {
   name: string
+  team?: number
+  competition?: number
   year: number
   jersey: string
   pants: string
@@ -136,11 +138,14 @@ type Kit = {
           </div>
 
           <div role="group">
-            <button type="button" (click)="save()">Save</button>
-            @if (this.$id) {
-              <button type="button" (click)="wantDelete = !wantDelete" class="secondary">Delete</button>
-            }
+            <button type="button" (click)="save()" class="secondary">Save</button>
           </div>
+            @if (this.$id) {
+              <div role="group">
+                <button type="button" (click)="duplicate()">Duplicate</button>
+                <button type="button" (click)="wantDelete = !wantDelete">Delete</button>
+              </div>
+            }
         </div>
       </article>
     }
@@ -427,6 +432,33 @@ export class NewKitComponent {
     deleteKit(this.$id).then(() => {
       this.loading = false;
       this.router.navigate(['/kit/new']);
+    });
+  }
+
+  public duplicate() {
+    const kit = {
+      team: this.kit.team,
+      competition: this.kit.competition,
+      name: this.kit.name,
+      year: this.kit.year,
+      jersey: this.kit.jersey,
+      pants: this.kit.pants,
+      socks: this.kit.socks,
+      layer1: this.kit.layer1,
+      layer2: this.kit.layer2,
+      layer3: this.kit.layer3,
+      layer1Color: this.kit.layer1Color,
+      layer2Color: this.kit.layer2Color,
+      layer3Color: this.kit.layer3Color
+    };
+    this.loading = true;
+
+    saveKit(kit).then((data) => {
+      this.loading = false;
+      this.initKit();
+      this.setLayers();
+      console.log('data', data[0].id);
+      this.router.navigate(['/kit/update', data[0].id]);
     });
   }
 }
