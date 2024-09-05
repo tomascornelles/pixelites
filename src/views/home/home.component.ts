@@ -15,7 +15,7 @@ import { getLatestKits, getTemplates } from '@api/loadData';
     <div class="years">
       <article>
         <header>
-          <h3>Latest kits</h3>
+          <h2>Latest kits</h2>
         </header>
         <div class="kits">
           @for (kit of kits; track kit) {

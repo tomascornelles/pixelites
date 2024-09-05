@@ -26,11 +26,10 @@ import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
       <li>
         <span
           class="menu-toggle"
-          aria-label="Open"
           rel="next"
           (click)="toggleMenu()"
         >
-          <img src="search.svg" width="32">
+          <img src="search.svg" width="32" alt="Search" />
         </span>
       </li>
     </ul>
