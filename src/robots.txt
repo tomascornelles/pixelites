@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /teams
+Allow: /competition
+Disallow: /kit
