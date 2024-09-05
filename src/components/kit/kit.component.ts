@@ -71,8 +71,8 @@ export class KitComponent {
     } = this.config;
     const canvas = document.getElementById(this.canvasId);
 
-    canvas['width']= 8 * size;
-    canvas['height'] = 8 * size + 4;
+    canvas['width']= 12 * size;
+    canvas['height'] = 12 * size + 4;
     const ctx = canvas["getContext"]("2d");
     this.draw(ctx, kit.colors)
     setTimeout(() => this.checkDraw(size, kit),500);
@@ -118,7 +118,7 @@ export class KitComponent {
 
           if (color) {
             ctx.fillStyle = color;
-            ctx.fillRect(size * x, size * y, size +4, size +4);
+            ctx.fillRect(size * (x+2), size * (y+2), size +4, size +4);
           }
       }
     }
@@ -131,7 +131,7 @@ export class KitComponent {
 
           if (color) {
             ctx.fillStyle = color;
-            ctx.fillRect(size * x +1, size * y +1, size +2, size +2);
+            ctx.fillRect(size * (x+2) +1, size * (y+2) +1, size +2, size +2);
           }
       }
     }
@@ -164,11 +164,11 @@ export class KitComponent {
 
         if (color) {
           ctx.fillStyle = color;
-          ctx.fillRect(size * x +2, size * y +2, size, size);
+          ctx.fillRect(size * (x+2) +2, size * (y+2) +2, size, size);
 
           if (template === 'pants') {
             ctx.fillStyle = '#00000011';
-            ctx.fillRect(size * x +2, size * y +2, size, size);
+            ctx.fillRect(size * (x+2) +2, size * (y+2) +2, size, size);
           }
         }
       }
