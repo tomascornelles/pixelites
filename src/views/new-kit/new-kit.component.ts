@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
+import { LoginComponent } from '@views/login/login.component';
 import { getAllTeams, getAllCompetitions, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
 
@@ -21,9 +22,12 @@ type Kit = {
 @Component({
   selector: 'app-new-kit',
   standalone: true,
-  imports: [KitComponent, FormsModule, RouterModule],
+  imports: [KitComponent, FormsModule, RouterModule, LoginComponent],
   template: `
-    @if (loading) {
+    @if (!$isLoggedIn) {
+      <app-login (loggedIn)="isLogged()"></app-login>
+    }
+    @else if (loading) {
       <article aria-busy="true">Loading</article>
     }
     @else {
@@ -118,14 +122,15 @@ type Kit = {
           </div>
 
           <div role="group">
-            <select name="name" id="name" [(ngModel)]="kit['name']">
+            <input type="text" id="name" name="name" [(ngModel)]="kit['name']" placeholder="Name" list="names">
+            <datalist id="names">
               <option value="home">Home</option>
               <option value="home alt">Home alt</option>
               <option value="away">Away</option>
               <option value="third">Third</option>
               <option value="fourth">Fourth</option>
               <option value="special">Special</option>
-            </select>
+            </datalist>
             <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
           </div>
 
@@ -156,6 +161,7 @@ type Kit = {
         </footer>
       </article>
     </dialog>
+
   `,
   styles: `
     .kit-form {
@@ -169,6 +175,7 @@ type Kit = {
     }
   `,
 })
+
 export class NewKitComponent {
   kitInit: Kit = {
     'name': 'home',
@@ -209,10 +216,19 @@ export class NewKitComponent {
   $id = null;
   loading = true;
   wantDelete = false;
+  $isLoggedIn = false;
 
   constructor(private route: ActivatedRoute, public router: Router) { }
 
   ngOnInit() {
+    this.isLogged();
+
+    if (this.$isLoggedIn) {
+      this.init();
+    }
+  }
+
+  private init() {
     getAllTeams().then((teams) => {
       for (let team in teams) {
         this.$teams.push(teams[team]);
@@ -245,6 +261,13 @@ export class NewKitComponent {
         this.setLayers();
       });
     });
+  }
+
+  public isLogged() {
+    if (typeof window !== 'undefined' && window.sessionStorage.getItem('user')) {
+      this.$isLoggedIn = true;
+      this.init();
+    }
   }
 
   private initKit() {

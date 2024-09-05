@@ -167,6 +167,16 @@ const reduceData = async (data, key: string) => {
   return reducedData;
 }
 
+const login = async (email, password) => {
+  const { data, error } = await supabase
+  .from('users')
+  .select('*')
+  .eq('email', email)
+  .eq('password', password);
+
+  return data || error;
+}
+
 export {
   loadData,
   getTeams,
@@ -183,4 +193,5 @@ export {
   deleteKit,
   countKits,
   countTeams,
+  login,
 };
