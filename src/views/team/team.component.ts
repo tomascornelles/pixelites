@@ -14,7 +14,7 @@ import sortByName from '@services/sortByName';
     }
     @else {
     <h2>
-      {{ kits[0]['team']['name'].toUpperCase() }}
+      {{ kits[0]['team'].toUpperCase() }}
     </h2>
     <p class="competitions">
       @for (competition of competitions; track competition) {
@@ -99,9 +99,9 @@ export class TeamComponent {
             this.years.push(kits[kit]['year'])
           }
 
-          if (!allCompetitions[kits[kit]['competition'].id]) {
-            allCompetitions[kits[kit]['competition'].id] = kits[kit]['competition'];
-            this.competitions.push(kits[kit]['competition']);
+          if (!allCompetitions[kits[kit]['competitionSlug']]) {
+            allCompetitions[kits[kit]['competitionSlug']] = kits[kit]['competitionSlug'];
+            this.competitions.push({name: kits[kit]['competition'], slug: kits[kit]['competitionSlug']});
           }
         }
 

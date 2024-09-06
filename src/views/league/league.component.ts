@@ -23,11 +23,11 @@ import { getLeagueKits, getTemplates } from '@api/loadData';
           <div class="kits">
             @for (kit of kits; track kit) {
               @if (kit['year'] === year) {
-                <a [routerLink]="['/team', kit['team']['slug']]">
+                <a [routerLink]="['/team', kit['teamSlug']]">
                   <app-kit
                     [layers]="kit"
                     [templates]="templates"
-                    [label]="kit['team']['name']"
+                    [label]="kit['team']"
                   ></app-kit>
                 </a>
               }
@@ -96,10 +96,10 @@ export class LeagueComponent {
 
   private sortByTeamName(kits) {
     return kits.sort((a, b) => {
-      if (a['team']['name'] < b['team']['name']) {
+      if (a['team'] < b['team']) {
         return -1
       }
-      if (a['team']['name'] > b['team']['name']) {
+      if (a['team'] > b['team']) {
         return 1
       }
       return 0

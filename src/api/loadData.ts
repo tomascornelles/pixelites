@@ -9,22 +9,35 @@ const loadData = async (table: string, columns: string = '') => {
 const getTeams = async () => {
   const { data, error } = await supabase
   .from('kits')
-  .select('team!inner(id, name, slug)');
+  .select('team, teamSlug');
 
-  return reduceData(data, 'team') || error;
+  let teams = {};
+  const result = [];
+
+  data.forEach(kit => {
+    if (!teams[kit['teamSlug']]) {
+      teams[kit['teamSlug']] = {'slug': kit['teamSlug'], 'name': kit['team']};
+    }
+  })
+
+  for (let team in teams) {
+    result.push(teams[team])
+  }
+
+  return result || error;
 }
 
 const getLeagues = async () => {
   const { data, error } = await supabase
   .from('kits')
-  .select('competition!inner(id, name, slug, country))')
+  .select('competition, competitionSlug')
 
   let competitions = {};
   const result = [];
 
   data.forEach(kit => {
-    if (!competitions[kit['competition'].id]) {
-      competitions[kit['competition'].id] = kit['competition'];
+    if (!competitions[kit['competitionSlug']]) {
+      competitions[kit['competitionSlug']] = {'slug': kit['competitionSlug'], 'name': kit['competition']};
     }
   })
 
@@ -38,8 +51,8 @@ const getLeagues = async () => {
 const getKits = async (teamId) => {
   const { data, error } = await supabase
   .from('kits')
-  .select('*, team!inner(id, name, slug), competition!inner(id, name, slug, country)')
-  .eq('team.slug', teamId)
+  .select('*')
+  .eq('teamSlug', teamId)
   .order('year', { ascending: false });
 
   return data || error;
@@ -48,8 +61,8 @@ const getKits = async (teamId) => {
 const getLeagueKits = async (leagueId) => {
   const { data, error } = await supabase
   .from('kits')
-  .select('*, team!inner(id, name, slug), competition!inner(id, name, slug, country)')
-  .eq('competition.slug', leagueId)
+  .select('*')
+  .eq('competitionSlug', leagueId)
   .order('year', { ascending: false });
 
   return data || error;
@@ -74,7 +87,7 @@ const getAllCompetitions = async () => {
 const getLatestKits = async () => {
   const { data, error } = await supabase
   .from('kits')
-  .select('*, team!inner(id, name, slug)')
+  .select('*')
   .order('created_at', { ascending: false })
   .limit(24);
 

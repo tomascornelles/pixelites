@@ -19,11 +19,11 @@ import { getLatestKits, getTemplates } from '@api/loadData';
         </header>
         <div class="kits">
           @for (kit of kits; track kit) {
-            <a [routerLink]="['/team', kit['team']['slug']]">
+            <a [routerLink]="['/team', kit['teamSlug']]">
               <app-kit
                 [layers]="kit"
                 [templates]="templates"
-                [label]="kit['team']['name'] + '|' + kit['year'] + '|' + kit['name']"
+                [label]="kit['team'] + '|' + kit['year'] + '|' + kit['name']"
               ></app-kit>
             </a>
           }

@@ -58,16 +58,13 @@ import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
             Leagues
           </h3>
         }
-        @for ($league of $filteredLeagues; track $league.id) {
+        @for ($league of $filteredLeagues; track $league.slug) {
           <button
             class="outline"
             [routerLink]="['/competition', $league.slug]"
             (click)="toggleMenu()"
           >
             {{ $league.name }}
-            @if ($league.country) {
-              ({{ $league.country }})
-            }
           </button>
         }
 
@@ -207,7 +204,7 @@ export class NavigationComponent {
       this.$filteredTeams = this.$teams;
 
     } else {
-      this.$filteredLeagues = this.$leagues.filter((league) => (league.name.toLowerCase().includes($event.toLowerCase()) || league.country.toLowerCase().includes($event.toLowerCase())))
+      this.$filteredLeagues = this.$leagues.filter((league) => (league.name.toLowerCase().includes($event.toLowerCase())))
       this.$filteredTeams = this.$teams.filter((team) => team.name.toLowerCase().includes($event.toLowerCase()))
     }
   }

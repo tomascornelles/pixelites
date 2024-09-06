@@ -3,12 +3,14 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { LoginComponent } from '@views/login/login.component';
 import { isLogged } from '@services/login';
-import { getAllTeams, getAllCompetitions, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
+import { getTeams, getLeagues, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
 import { FormsModule } from '@angular/forms';
 
 type Kit = {
   name: string
+  teamSlug?: string
   team?: number
+  competitionSlug?: string
   competition?: number
   year: number
   jersey: string
@@ -109,17 +111,17 @@ type Kit = {
           </div>
 
           <div role="group">
-            <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team">
+            <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team" autocomplete="off">
             <datalist id="teams">
               @for (team of $teams; track team) {
-                <option value="{{ team['id'] }}">{{ team['name'] }}</option>
+                <option value="{{ team['name'] }}">{{ team['slug'] }}</option>
               }
             </datalist>
 
-            <input type="text" id="competition" name="competition" [(ngModel)]="kit['competition']" list="competitions" placeholder="Competition">
+            <input type="text" id="competition" name="competition" [(ngModel)]="kit['competition']" list="competitions" placeholder="Competition" autocomplete="off">
             <datalist id="competitions">
               @for (competition of $competitions; track competition) {
-                <option value="{{ competition['id'] }}">{{ competition['name'] }}</option>
+                <option value="{{ competition['name'] }}">{{ competition['slug'] }}</option>
               }
             </datalist>
           </div>
@@ -235,16 +237,17 @@ export class NewKitComponent {
     if (isLogged()) {
       this.$isLoggedIn = true;
 
-      getAllTeams().then((teams) => {
+      getTeams().then((teams) => {
         for (let team in teams) {
           this.$teams.push(teams[team]);
         }
       });
 
-      getAllCompetitions().then((competitions) => {
+      getLeagues().then((competitions) => {
         for (let competition in competitions) {
           this.$competitions.push(competitions[competition]);
         }
+        console.log('this.$competitions', this.$competitions)
       });
 
       getTemplates().then((templates) => {
@@ -411,6 +414,9 @@ export class NewKitComponent {
 
   public save() {
     this.loading = true;
+    this.checkTeam(this.kit['team']);
+    this.checkCompetition(this.kit['competition']);
+
     if (this.$id) {
       updateKit(this.kit).then(() => {
         this.loading = false;
@@ -421,10 +427,39 @@ export class NewKitComponent {
         this.loading = false;
         this.initKit();
         this.setLayers();
-        console.log('data', data[0].id);
         this.router.navigate(['/kit/update', data[0].id]);
       });
     }
+  }
+
+  private checkTeam(team) {
+    console.log('kits', this.kit)
+    for (let teamIndex in this.$teams) {
+      if (this.$teams[teamIndex].name !== team) {
+        this.kit.teamSlug = this.textToSlug(team);
+        this.kit.team = team;
+      }
+    }
+  }
+
+  private checkCompetition(competition) {
+    for (let competitionIndex in this.$competitions) {
+      if (this.$competitions[competitionIndex].name !== competition) {
+        this.kit.competitionSlug = this.textToSlug(competition);
+        this.kit.competition = competition;
+      }
+    }
+  }
+
+  private textToSlug(text) {
+    return text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, '-') // Replace spaces with -
+      .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+      .replace(/\-\-+/g, '-') // Replace multiple - with single -
+      .replace(/^-+/, '') // Trim - from start of text
+      .replace(/-+$/, ''); // Trim - from end of text
   }
 
   public delete() {
@@ -437,7 +472,9 @@ export class NewKitComponent {
 
   public duplicate() {
     const kit = {
+      teamSlug: this.kit.teamSlug,
       team: this.kit.team,
+      competitionSlug: this.kit.competitionSlug,
       competition: this.kit.competition,
       name: this.kit.name,
       year: this.kit.year,
