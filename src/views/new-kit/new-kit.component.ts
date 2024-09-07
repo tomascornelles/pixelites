@@ -414,8 +414,8 @@ export class NewKitComponent {
 
   public save() {
     this.loading = true;
-    this.checkTeam(this.kit['team']);
-    this.checkCompetition(this.kit['competition']);
+    this.setTeam(this.kit['team']);
+    this.setCompetition(this.kit['competition']);
 
     if (this.$id) {
       updateKit(this.kit).then(() => {
@@ -432,23 +432,14 @@ export class NewKitComponent {
     }
   }
 
-  private checkTeam(team) {
-    console.log('kits', this.kit)
-    for (let teamIndex in this.$teams) {
-      if (this.$teams[teamIndex].name !== team) {
-        this.kit.teamSlug = this.textToSlug(team);
-        this.kit.team = team;
-      }
-    }
+  private setTeam(team) {
+    this.kit.teamSlug = this.textToSlug(team);
+    this.kit.team = team;
   }
 
-  private checkCompetition(competition) {
-    for (let competitionIndex in this.$competitions) {
-      if (this.$competitions[competitionIndex].name !== competition) {
-        this.kit.competitionSlug = this.textToSlug(competition);
-        this.kit.competition = competition;
-      }
-    }
+  private setCompetition(competition) {
+    this.kit.competitionSlug = this.textToSlug(competition);
+    this.kit.competition = competition;
   }
 
   private textToSlug(text) {
