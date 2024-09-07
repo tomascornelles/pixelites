@@ -26,34 +26,41 @@ import sortByName from '@services/sortByName';
     </p>
     <div class="years">
       @for (year of years; track year) {
-        <article>
-          <header>
-            <h3>{{year}}</h3>
-          </header>
+        @for (competition of competitions; track competition) {
+          <article>
+            <header>
+              <h3>
+                {{year}}
+                @if (competitions.length > 1) {
+                  {{competition['name']}}
+                }
+              </h3>
+            </header>
 
-          <div class="kits">
-            @for (kit of kits; track kit) {
-              @if (kit['year'] === year) {
-                @if ($isLoggedIn) {
-                  <a [routerLink]="['/kit/update', kit['id']]">
+            <div class="kits">
+              @for (kit of kits; track kit) {
+                @if (kit['year'] === year && kit['competitionSlug'] === competition['slug']) {
+                  @if ($isLoggedIn) {
+                    <a [routerLink]="['/kit/update', kit['id']]">
+                      <app-kit
+                        [layers]="kit"
+                        [templates]="templates"
+                        [label]="kit['name']"
+                      ></app-kit>
+                    </a>
+                  }
+                  @if (!$isLoggedIn) {
                     <app-kit
                       [layers]="kit"
                       [templates]="templates"
                       [label]="kit['name']"
                     ></app-kit>
-                  </a>
-                }
-                @if (!$isLoggedIn) {
-                  <app-kit
-                    [layers]="kit"
-                    [templates]="templates"
-                    [label]="kit['name']"
-                  ></app-kit>
+                  }
                 }
               }
-            }
-          </div>
-        </article>
+            </div>
+          </article>
+        }
       }
     </div>
     }
