@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { getKits, getTemplates } from '@api/loadData';
+import { isLogged } from '@services/login';
 import sortByName from '@services/sortByName';
 
 @Component({
@@ -33,11 +34,22 @@ import sortByName from '@services/sortByName';
           <div class="kits">
             @for (kit of kits; track kit) {
               @if (kit['year'] === year) {
-                <app-kit
-                  [layers]="kit"
-                  [templates]="templates"
-                  [label]="kit['name']"
-                ></app-kit>
+                @if ($isLoggedIn) {
+                  <a [routerLink]="['/kit/update', kit['id']]">
+                    <app-kit
+                      [layers]="kit"
+                      [templates]="templates"
+                      [label]="kit['name']"
+                    ></app-kit>
+                  </a>
+                }
+                @if (!$isLoggedIn) {
+                  <app-kit
+                    [layers]="kit"
+                    [templates]="templates"
+                    [label]="kit['name']"
+                  ></app-kit>
+                }
               }
             }
           </div>
@@ -81,6 +93,7 @@ export class TeamComponent {
   years = [];
   loading = true;
   competitions = [];
+  $isLoggedIn = false;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -92,6 +105,11 @@ export class TeamComponent {
       this.years = [];
       this.competitions = [];
       const allCompetitions = {};
+
+      if (isLogged()) {
+        this.$isLoggedIn = true;
+      }
+
       getKits(this.teamId).then((kits) => {
         for (let kit in kits) {
           this.kits.push(kits[kit])
