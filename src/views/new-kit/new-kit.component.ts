@@ -114,14 +114,14 @@ type Kit = {
             <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team" autocomplete="off">
             <datalist id="teams">
               @for (team of $teams; track team) {
-                <option value="{{ team['name'] }}">{{ team['slug'] }}</option>
+                <option value="{{ team['name'] }}"></option>
               }
             </datalist>
 
             <input type="text" id="competition" name="competition" [(ngModel)]="kit['competition']" list="competitions" placeholder="Competition" autocomplete="off">
             <datalist id="competitions">
               @for (competition of $competitions; track competition) {
-                <option value="{{ competition['name'] }}">{{ competition['slug'] }}</option>
+                <option value="{{ competition['name'] }}"></option>
               }
             </datalist>
           </div>
@@ -129,12 +129,12 @@ type Kit = {
           <div role="group">
             <input type="text" id="name" name="name" [(ngModel)]="kit['name']" placeholder="Name" list="names">
             <datalist id="names">
-              <option value="home">Home</option>
-              <option value="home alt">Home alt</option>
-              <option value="away">Away</option>
-              <option value="third">Third</option>
-              <option value="fourth">Fourth</option>
-              <option value="special">Special</option>
+              <option value="Home"></option>
+              <option value="Home alt"></option>
+              <option value="Away"></option>
+              <option value="Third"></option>
+              <option value="Fourth"></option>
+              <option value="Special"></option>
             </datalist>
             <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
           </div>
@@ -247,7 +247,6 @@ export class NewKitComponent {
         for (let competition in competitions) {
           this.$competitions.push(competitions[competition]);
         }
-        console.log('this.$competitions', this.$competitions)
       });
 
       getTemplates().then((templates) => {
@@ -462,6 +461,8 @@ export class NewKitComponent {
   }
 
   public duplicate() {
+    this.setTeam(this.kit['team']);
+    this.setCompetition(this.kit['competition']);
     const kit = {
       teamSlug: this.kit.teamSlug,
       team: this.kit.team,

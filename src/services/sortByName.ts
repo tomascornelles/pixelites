@@ -1,5 +1,5 @@
 export default function sortByName (kits) {
-  const names = ['home', 'home alt', 'away', 'third', 'fourth', 'special'];
+  const names = ['Home', 'Home alt', 'Away', 'Third', 'Fourth', 'Special'];
   const kitsSorted = [];
   for (let name in names) {
     for (let kit in kits) {

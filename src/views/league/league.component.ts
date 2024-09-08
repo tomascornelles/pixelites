@@ -74,7 +74,8 @@ export class LeagueComponent {
       this.years = [];
       getLeagueKits(this.leagueId).then((kits) => {
         for (let kit in kits) {
-          if (kits[kit]['name'] === 'home') {
+          this.leagueId = kits[kit]['competition'];
+          if (kits[kit]['name'] === 'Home') {
             this.kits.push(kits[kit]);
           }
           if (!this.years.includes(kits[kit]['year'])) {

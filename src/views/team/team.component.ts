@@ -15,7 +15,7 @@ import sortByName from '@services/sortByName';
     }
     @else {
     <h2>
-      {{ kits[0]['team'].toUpperCase() }}
+      {{ teamName.toUpperCase() }}
     </h2>
     <p class="competitions">
       @for (competition of competitions; track competition) {
@@ -26,16 +26,17 @@ import sortByName from '@services/sortByName';
     </p>
     <div class="years">
       @for (year of years; track year) {
-        @for (competition of competitions; track competition) {
           <article>
             <header>
-              <h3>
-                {{year}}
-                @if (competitions.length > 1) {
-                  {{competition['name']}}
-                }
-              </h3>
+              <h2> {{year}} </h2>
             </header>
+
+        @for (competition of competitions; track competition) {
+          @if (competitions.length > 1 && yearsAndCompetitions[year][competition['slug']]) {
+          <h3>
+            {{competition['name']}}
+          </h3>
+          }
 
             <div class="kits">
               @for (kit of kits; track kit) {
@@ -59,8 +60,8 @@ import sortByName from '@services/sortByName';
                 }
               }
             </div>
-          </article>
         }
+        </article>
       }
     </div>
     }
@@ -70,14 +71,15 @@ import sortByName from '@services/sortByName';
       display: inline-block;
     }
     h2 {
-      margin-block-end: 1em;
-    }
-    h3 {
       margin-block-end: 0;
     }
     h2 a {
       text-decoration: none;
       margin-inline-end: 0.5em;
+    }
+    h3 {
+      font-size: 1.2rem;
+      margin-block-start: 1em;
     }
     .kits {
       display:flex;
@@ -87,7 +89,7 @@ import sortByName from '@services/sortByName';
     }
     .competitions {
       display: flex;
-      gap: 1em;
+      gap: 2em;
       margin-block-end: 1em;
     }
   `,
@@ -95,11 +97,13 @@ import sortByName from '@services/sortByName';
 
 export class TeamComponent {
   teamId = '';
+  teamName = '';
   kits = [];
   templates = [];
   years = [];
-  loading = true;
   competitions = [];
+  yearsAndCompetitions = {};
+  loading = true;
   $isLoggedIn = false;
 
   constructor(private route: ActivatedRoute) { }
@@ -119,7 +123,15 @@ export class TeamComponent {
 
       getKits(this.teamId).then((kits) => {
         for (let kit in kits) {
-          this.kits.push(kits[kit])
+          this.kits.push(kits[kit]);
+          if (!this.yearsAndCompetitions[kits[kit]['year']]) {
+            this.yearsAndCompetitions[kits[kit]['year']] = {};
+          }
+
+          if (!this.yearsAndCompetitions[kits[kit]['year']][kits[kit]['competitionSlug']]) {
+            this.yearsAndCompetitions[kits[kit]['year']][kits[kit]['competitionSlug']] = kits[kit];
+          }
+
           if (!this.years.includes(kits[kit]['year'])) {
             this.years.push(kits[kit]['year'])
           }
