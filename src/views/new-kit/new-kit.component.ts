@@ -37,15 +37,6 @@ type Kit = {
     }
     @else {
       <article>
-        <header>
-        @if ($id) {
-          <h2>Edit Kit</h2>
-        }
-        @else {
-          <h2>New Kit</h2>
-        }
-        </header>
-
         <div class="kit-form">
           <canvas [attr.id]="canvasId" height="132"></canvas>
         </div>

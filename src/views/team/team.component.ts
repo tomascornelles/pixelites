@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
+import { Error404Component } from '@views/error404/error404.component';
 import { getKits, getTemplates } from '@api/loadData';
 import { isLogged } from '@services/login';
 import sortByName from '@services/sortByName';
@@ -8,10 +9,13 @@ import sortByName from '@services/sortByName';
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [KitComponent, RouterModule],
+  imports: [KitComponent, Error404Component, RouterModule],
   template: `
     @if (loading) {
       <article aria-busy="true">Loading</article>
+    }
+    @else if (kits.length === 0) {
+      <app-error404></app-error404>
     }
     @else {
     <h2>
