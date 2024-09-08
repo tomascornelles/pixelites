@@ -55,6 +55,7 @@ import sortByName from '@services/sortByName';
                       [layers]="kit"
                       [templates]="templates"
                       [label]="kit['name']"
+                      [canDownload]="true"
                     ></app-kit>
                   }
                 }

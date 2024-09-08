@@ -37,17 +37,14 @@ type Kit = {
     }
     @else {
       <article>
+        <header>
         @if ($id) {
           <h2>Edit Kit</h2>
-          <div role="group">
-            <a [routerLink]="['/kit/new']">
-              Create a new kit
-            </a>
-          </div>
         }
         @else {
           <h2>New Kit</h2>
         }
+        </header>
 
         <div class="kit-form">
           <canvas [attr.id]="canvasId" height="132"></canvas>
@@ -125,31 +122,39 @@ type Kit = {
               }
             </datalist>
           </div>
-
-          <div role="group">
-            <input type="text" id="name" name="name" [(ngModel)]="kit['name']" placeholder="Name" list="names">
-            <datalist id="names">
-              <option value="Home"></option>
-              <option value="Home alt"></option>
-              <option value="Away"></option>
-              <option value="Third"></option>
-              <option value="Fourth"></option>
-              <option value="Special"></option>
-            </datalist>
-            <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
-          </div>
-
-          <div role="group">
-            <button type="button" (click)="save()" class="secondary">Save</button>
-          </div>
-            @if (this.$id) {
-              <div role="group">
-                <button type="button" (click)="duplicate()">Duplicate</button>
-                <button type="button" (click)="wantDelete = !wantDelete">Delete</button>
-              </div>
-            }
         </div>
-      </article>
+
+        <div role="group">
+          <input type="text" id="name" name="name" [(ngModel)]="kit['name']" placeholder="Name" list="names">
+          <datalist id="names">
+            <option value="Home"></option>
+            <option value="Home alt"></option>
+            <option value="Away"></option>
+            <option value="Third"></option>
+            <option value="Fourth"></option>
+            <option value="Special"></option>
+          </datalist>
+          <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
+        </div>
+
+        <footer>
+          <button type="button" (click)="save()" class="secondary">save</button>
+          <div role="group">
+            @if (this.$id) {
+                <button type="button" (click)="duplicate()" class="outline">copy</button>
+                <button type="button" (click)="wantDelete = !wantDelete" class="outline">delete</button>
+            }
+            @if ($id) {
+              <a [routerLink]="['/kit/new']" role="button" class="outline">
+                new
+              </a>
+              <a [routerLink]="['/team', kit['teamSlug']]" role="button" class="outline">
+                team
+              </a>
+            }
+          </div>
+        </footer>
+        </article>
     }
     <dialog
     [open]="wantDelete"
@@ -181,6 +186,11 @@ type Kit = {
       display: block;
       width: 100%;
       flex-grow: 1;
+    }
+
+    footer button,
+    footer [role="button"] {
+      width: 100%;
     }
   `,
 })

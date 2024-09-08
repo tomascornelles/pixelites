@@ -10,6 +10,8 @@ type Kit = {
   layer1: [string, string]
   layer2: [string, string]
   layer3: [string, string]
+  teamSlug: string
+  competitionSlug: string
 }
 
 @Component({
@@ -17,8 +19,8 @@ type Kit = {
   standalone: true,
   imports: [],
   template: `
-  <div>
-    <canvas [attr.id]="canvasId"></canvas>
+  <div (click)="download()" title="Download kit image">
+    <canvas [attr.id]="canvasId" name="canvasPepe"></canvas>
     <p class="label" [innerHTML]="label"></p>
   </div>
   `,
@@ -28,6 +30,7 @@ type Kit = {
       flex-direction: column;
       align-items: center;
       width: 6rem;
+      cursor: pointer;
     }
     .label {
       text-align: center;
@@ -42,6 +45,7 @@ export class KitComponent {
   @Input() layers: Kit;
   @Input() templates: Kit[];
   @Input() label: String;
+  @Input() canDownload: boolean = false;
   canvasId = Math.random().toString(36).substring(2, 15);
   config = {
     size: 8,
@@ -189,6 +193,17 @@ export class KitComponent {
 
     if (colors[3] === 0) {
       this.print(kit);
+    }
+  }
+
+  public download() {
+    console.log('this.layers',this.layers);
+    if (this.canDownload) {
+      const link = document.createElement('a');
+      const canvas = document.getElementById(this.canvasId) as HTMLCanvasElement;
+      link.download = `${this.layers.year}_${this.layers.teamSlug}_${this.layers.competitionSlug}_${this.layers.name.toLowerCase()}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
     }
   }
 }

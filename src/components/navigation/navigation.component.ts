@@ -14,11 +14,6 @@ import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
     <a [routerLink]="['/']">
       <h1 class="title">
         Pixelites
-        @if ($countTeams > 0 && $countKits > 0) {
-          <small>
-            {{ $countTeams }} teams with {{ $countKits }} kits
-          </small>
-        }
       </h1>
     </a>
 

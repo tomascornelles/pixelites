@@ -1,18 +1,35 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
-import { getLatestKits, getTemplates } from '@api/loadData';
+import { getLatestKits, getTemplates, countKits, countTeams } from '@api/loadData';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [KitComponent, RouterModule],
   template: `
+    <blockquote>
+      Remember those kits that made you vibrate on the pitch? In Pixelites, we revive the magic of football through 8x6 pixel designs. Each kit is a journey through time, a time capsule capturing the essence of an era and a team. Explore our extensive collection, organized by year and competition, and discover hidden treasures from the past. Pixelites is more than just a collection, it's a celebration of football history!
+    </blockquote>
+
     @if (loading) {
       <article aria-busy="true">Loading</article>
     }
     @else {
-    <div class="years">
+        @if ($countKits > 0 || $countTeams > 0) {
+        <article>
+          <header>
+            <h2>Overview</h2>
+          </header>
+          <p>
+            There are <strong>{{$countKits}}</strong> kits and <strong>{{$countTeams }}</strong> teams
+          </p>
+          <p>
+            Last updated: {{ $lastUppdated }}
+          </p>
+        </article>
+      }
+
       <article>
         <header>
           <h2>Latest kits</h2>
@@ -23,13 +40,12 @@ import { getLatestKits, getTemplates } from '@api/loadData';
               <app-kit
                 [layers]="kit"
                 [templates]="templates"
-                [label]="kit['team'] + '|' + kit['year'] + '|' + kit['name']"
+                [label]="kit['team'] + '|' + kit['year']"
               ></app-kit>
             </a>
           }
         </div>
       </article>
-    </div>
     }
   `,
   styles: `
@@ -37,7 +53,7 @@ import { getLatestKits, getTemplates } from '@api/loadData';
       display: inline-block;
     }
     h2 {
-      margin-block-end: 1em;
+      margin-block-end: 0;
     }
     h3 {
       margin-block-end: 0;
@@ -55,6 +71,9 @@ export class HomeComponent {
   leagueId = '';
   kits = [];
   templates = [];
+  $countKits = 0;
+  $countTeams = 0;
+  $lastUppdated = '';
   loading = true;
 
   constructor(private route: ActivatedRoute) { }
@@ -69,6 +88,7 @@ export class HomeComponent {
           this.kits.push(kits[kit]);
         }
         this.loading = false
+        this.$lastUppdated = new Date(this.kits[0]['created_at']).toLocaleDateString();
       })
     });
 
@@ -77,5 +97,14 @@ export class HomeComponent {
         this.templates.push(templates[template])
       }
     })
+
+    countKits().then((count) => {
+      this.$countKits = +count
+    })
+
+    countTeams().then((count) => {
+      this.$countTeams = +count
+    })
+
   }
 }
