@@ -197,7 +197,7 @@ type Kit = {
 
 export class NewKitComponent {
   kitInit: Kit = {
-    'name': 'home',
+    'name': 'Home',
     'year': new Date().getFullYear(),
     'jersey': '#FFFFFF',
     'pants': '#FFFFFF',
