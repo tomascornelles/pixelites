@@ -487,7 +487,6 @@ export class NewKitComponent {
       this.loading = false;
       this.initKit();
       this.setLayers();
-      console.log('data', data[0].id);
       this.router.navigate(['/kit/update', data[0].id]);
     });
   }

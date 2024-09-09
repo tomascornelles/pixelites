@@ -190,13 +190,13 @@ export class NavigationComponent {
   resetSearch() {
     this.$search = '';
     this.$filteredLeagues = this.$leagues
-    this.$filteredTeams = this.$teams
+    this.$filteredTeams = []
   }
 
   search($event) {
     if ($event === '') {
       this.$filteredLeagues = this.$leagues;;
-      this.$filteredTeams = this.$teams;
+      this.$filteredTeams = [];
 
     } else {
       this.$filteredLeagues = this.$leagues.filter((league) => (league.name.toLowerCase().includes($event.toLowerCase())))

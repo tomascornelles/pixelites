@@ -129,6 +129,7 @@ export class TeamComponent {
       getKits(this.teamId).then((kits) => {
         for (let kit in kits) {
           this.kits.push(kits[kit]);
+          this.teamName = kits[kit]['team'];
           if (!this.yearsAndCompetitions[kits[kit]['year']]) {
             this.yearsAndCompetitions[kits[kit]['year']] = {};
           }

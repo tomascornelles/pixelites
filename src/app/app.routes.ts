@@ -5,11 +5,16 @@ import { TeamComponent } from '@views/team/team.component';
 import { NewKitComponent } from '@views/new-kit/new-kit.component';
 import { LoginComponent } from '@views/login/login.component';
 import { Error404Component } from '@views/error404/error404.component';
+import { UpdateComponent } from './update/update.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+  },
+  {
+    path: 'update',
+    component: UpdateComponent,
   },
   {
     path: 'competition/:id',
