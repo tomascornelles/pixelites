@@ -116,7 +116,7 @@ type Kit = {
         </div>
 
         <div role="group">
-          <input type="text" id="name" name="name" [(ngModel)]="kit['name']" placeholder="Name" list="names">
+          <input type="text" id="name" name="name" [(ngModel)]="kit['name']" placeholder="Name" list="names" autocomplete="off">
           <datalist id="names">
             <option value="Home"></option>
             <option value="Home alt"></option>
@@ -132,18 +132,19 @@ type Kit = {
           <button type="button" (click)="save()" class="secondary">save</button>
           <div role="group">
             @if (this.$id) {
-                <button type="button" (click)="duplicate()" class="outline">copy</button>
-                <button type="button" (click)="wantDelete = !wantDelete" class="outline">delete</button>
-            }
-            @if ($id) {
               <a [routerLink]="['/kit/new']" role="button" class="outline">
                 new
               </a>
+              <button type="button" (click)="duplicate()" class="outline">copy</button>
+              <button type="button" (click)="wantDelete = !wantDelete" class="outline">delete</button>
+            }
+
+          </div>
+            @if ($id) {
               <a [routerLink]="['/team', kit['teamSlug']]" role="button" class="outline">
-                team
+                go to team
               </a>
             }
-          </div>
         </footer>
         </article>
     }
@@ -182,6 +183,7 @@ type Kit = {
     footer button,
     footer [role="button"] {
       width: 100%;
+      padding-inline: 0;
     }
   `,
 })
