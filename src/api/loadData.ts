@@ -31,6 +31,7 @@ const getLeagues = async () => {
   const { data, error } = await supabase
   .from('kits')
   .select('competition, competitionSlug')
+  .order('competition', { ascending: true });
 
   let competitions = {};
   const result = [];
