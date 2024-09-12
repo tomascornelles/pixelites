@@ -416,8 +416,8 @@ export class NewKitComponent {
 
   public save() {
     this.loading = true;
-    this.setTeam(this.kit['team']);
-    this.setCompetition(this.kit['competition']);
+    this.setTeam(this.kit['team'].trim());
+    this.setCompetition(this.kit['competition'].trim());
 
     if (this.$id) {
       updateKit(this.kit).then(() => {
