@@ -9,9 +9,9 @@ import { FormsModule } from '@angular/forms';
 type Kit = {
   name: string
   teamSlug?: string
-  team?: number
+  team?: string
   competitionSlug?: string
-  competition?: number
+  competition?: string
   year: number
   jersey: string
   pants: string
