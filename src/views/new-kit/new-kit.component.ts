@@ -148,6 +148,7 @@ type Kit = {
         </footer>
         </article>
     }
+
     <dialog
     [open]="wantDelete"
     >
@@ -166,7 +167,6 @@ type Kit = {
         </footer>
       </article>
     </dialog>
-
   `,
   styles: `
     .kit-form {

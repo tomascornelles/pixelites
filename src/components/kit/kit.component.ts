@@ -19,13 +19,32 @@ type Kit = {
   standalone: true,
   imports: [],
   template: `
-  <div (click)="download()" title="Download kit image">
+  <div (click)="wantDownload = !wantDownload" title="Download kit image" class="kit">
     <canvas [attr.id]="canvasId" name="canvasPepe"></canvas>
     <p class="label" [innerHTML]="label"></p>
   </div>
+
+  <dialog
+  [open]="wantDownload"
+  >
+    <article>
+      <header>
+        <h1>Download</h1>
+      </header>
+      <div>
+        <p>Do you want to download this kit?</p>
+      </div>
+      <footer>
+        <div role="group">
+          <button type="button" (click)="wantDownload = !wantDownload">Cancel</button>
+          <button type="button" (click)="download()" class="secondary">Download</button>
+        </div>
+      </footer>
+    </article>
+  </dialog>
   `,
   styles: `
-    div {
+    .kit {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -37,6 +56,17 @@ type Kit = {
     }
     p {
       line-height: 1rem;
+    }
+    button {
+      display: block;
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    footer button,
+    footer [role="button"] {
+      width: 100%;
+      padding-inline: 0;
     }
   `,
 })
@@ -59,6 +89,7 @@ export class KitComponent {
   templateColor = Math.floor(Math.random() * 6);
   templateBase = Math.ceil(Math.random() * 4);
   count = 0;
+  wantDownload = false;
 
   ngOnInit() {
     this.config.templates = this.templates;
@@ -197,7 +228,6 @@ export class KitComponent {
   }
 
   public download() {
-    console.log('this.layers',this.layers);
     if (this.canDownload) {
       const link = document.createElement('a');
       const canvas = document.getElementById(this.canvasId) as HTMLCanvasElement;
