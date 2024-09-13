@@ -50,6 +50,10 @@ type Kit = {
       align-items: center;
       width: 6rem;
       cursor: pointer;
+      width: 100px;
+    }
+    .kit canvas {
+      width: 100%;
     }
     .label {
       text-align: center;
@@ -78,7 +82,7 @@ export class KitComponent {
   @Input() canDownload: boolean = false;
   canvasId = Math.random().toString(36).substring(2, 15);
   config = {
-    size: 8,
+    size: 16,
     colors: [
       '',
       ['navajoWhite', 'navajoWhite', 'navajoWhite', 'peru', 'peru', 'saddleBrown'],
@@ -153,7 +157,7 @@ export class KitComponent {
 
           if (color) {
             ctx.fillStyle = color;
-            ctx.fillRect(size * (x+2), size * (y+2), size +4, size +4);
+            ctx.fillRect(size * (x+2), size * (y+2), size +8, size +8);
           }
       }
     }
@@ -166,7 +170,7 @@ export class KitComponent {
 
           if (color) {
             ctx.fillStyle = color;
-            ctx.fillRect(size * (x+2) +1, size * (y+2) +1, size +2, size +2);
+            ctx.fillRect(size * (x+2) +2, size * (y+2) +2, size +4, size +4);
           }
       }
     }
@@ -199,11 +203,11 @@ export class KitComponent {
 
         if (color) {
           ctx.fillStyle = color;
-          ctx.fillRect(size * (x+2) +2, size * (y+2) +2, size, size);
+          ctx.fillRect(size * (x+2) +4, size * (y+2) +4, size, size);
 
           if (template === 'pants') {
             ctx.fillStyle = '#00000011';
-            ctx.fillRect(size * (x+2) +2, size * (y+2) +2, size, size);
+            ctx.fillRect(size * (x+2) +4, size * (y+2) +4, size, size);
           }
         }
       }
@@ -234,6 +238,7 @@ export class KitComponent {
       link.download = `${this.layers.year}_${this.layers.teamSlug}_${this.layers.competitionSlug}_${this.layers.name.toLowerCase()}.png`;
       link.href = canvas.toDataURL();
       link.click();
+      this.wantDownload = false;
     }
   }
 }
