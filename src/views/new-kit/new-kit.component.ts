@@ -116,15 +116,14 @@ type Kit = {
         </div>
 
         <div role="group">
-          <input type="text" id="name" name="name" [(ngModel)]="kit['name']" placeholder="Name" list="names" autocomplete="off">
-          <datalist id="names">
-            <option value="Home"></option>
-            <option value="Home alt"></option>
-            <option value="Away"></option>
-            <option value="Third"></option>
-            <option value="Fourth"></option>
-            <option value="Special"></option>
-          </datalist>
+          <select id="name" name="name" [(ngModel)]="kit['name']">
+            <option value="Home">Home</option>
+            <option value="Home alt">Home alt</option>
+            <option value="Away">Away</option>
+            <option value="Third">Third</option>
+            <option value="Fourth">Fourth</option>
+            <option value="Special">Special</option>
+          </select>
           <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
         </div>
 
