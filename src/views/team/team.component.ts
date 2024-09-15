@@ -32,14 +32,14 @@ import sortByName from '@services/sortByName';
       @for (year of years; track year) {
           <article>
             <header>
-              <h2> {{year}} </h2>
+              <h3> {{year}} </h3>
             </header>
 
         @for (competition of competitions; track competition) {
           @if (competitions.length > 1 && yearsAndCompetitions[year][competition['slug']]) {
-          <h3>
+          <h4>
             {{competition['name']}}
-          </h3>
+          </h4>
           }
 
             <div class="kits">
@@ -83,8 +83,7 @@ import sortByName from '@services/sortByName';
       margin-inline-end: 0.5em;
     }
     h3 {
-      font-size: 1.2rem;
-      margin-block-start: 1em;
+      margin-block: 0;
     }
     .kits {
       display:flex;

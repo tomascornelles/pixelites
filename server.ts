@@ -54,4 +54,3 @@ function run(): void {
   });
 }
 
-run();
