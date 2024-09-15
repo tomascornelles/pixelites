@@ -20,7 +20,7 @@ html {
     display: none;
   }
 
-  h2{
+  h2 {
     text-align: center;
     margin-block-end: 1em !important;
     position: absolute;
@@ -28,7 +28,7 @@ html {
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--pico-background-color);
-    padding-inline: 2em;
+    padding-inline: 1em;
   }
 
   h3 {
@@ -83,6 +83,7 @@ html {
 
   app-league .kit p {
     font-size: .5rem;
+    margin-block-end: 0;
   }
 
   app-team .kit p {
