@@ -28,10 +28,12 @@ html {
   h3 {
     text-align: center;
     margin-block-end: 0 !important;
+    font-weight: 400;
   }
 
   h4 {
     text-align: center;
+    font-weight: 400;
   }
 
   .competitions {
@@ -70,6 +72,14 @@ html {
   }
 
   app-league article + article {
+    display: none;
+  }
+
+  app-league .kit p {
+    font-size: .5rem;
+  }
+
+  app-team .kit p {
     display: none;
   }
 
