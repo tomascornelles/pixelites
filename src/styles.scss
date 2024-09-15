@@ -23,6 +23,12 @@ html {
   h2{
     text-align: center;
     margin-block-end: 1em !important;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--pico-background-color);
+    padding-inline: 2em;
   }
 
   h3 {
@@ -58,10 +64,10 @@ html {
     position: absolute;
     left: 50%;
     transform: translateX(-50%) translateY(-.3rem);
-    top: 0;
-    font-size: 2rem;
+    bottom: 0;
+    font-size: 1rem;
     background-color: var(--pico-background-color);
-    padding-inline: 5rem;
+    padding-inline: 5em;
   }
 
   app-league, app-team {
