@@ -3,11 +3,12 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { Error404Component } from '@views/error404/error404.component';
 import { getLeagueKits, getTemplates } from '@api/loadData';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-league',
   standalone: true,
-  imports: [KitComponent, Error404Component, RouterModule],
+  imports: [KitComponent, Error404Component, RouterModule, CommonModule],
   template: `
     @if (loading) {
       <article aria-busy="true">Loading</article>
@@ -22,9 +23,14 @@ import { getLeagueKits, getTemplates } from '@api/loadData';
         <article>
           <header>
             <h3>{{year}}</h3>
+            @if (year === years[0]) {
+              <span (click)="print()" class="print">
+                <img src="print.svg" alt="Print">
+              </span>
+            }
           </header>
 
-          <div class="kits">
+          <div class="kits" [ngClass]="columns">
             @for (kit of kits; track kit) {
               @if (kit['year'] === year) {
                 <a [routerLink]="['/team', kit['teamSlug']]">
@@ -46,6 +52,10 @@ import { getLeagueKits, getTemplates } from '@api/loadData';
     app-kit {
       display: inline-block;
     }
+    header {
+      display: flex;
+      justify-content: space-between;
+    }
     h2 {
       margin-block-end: 1em;
     }
@@ -58,6 +68,9 @@ import { getLeagueKits, getTemplates } from '@api/loadData';
       gap: 1em;
       justify-content: space-between;
     }
+    .print {
+      cursor: pointer;
+    }
   `,
 })
 
@@ -67,6 +80,7 @@ export class LeagueComponent {
   templates = [];
   years = [];
   loading = true;
+  columns = 'columns-1';
 
   constructor(private route: ActivatedRoute) { }
 
@@ -89,7 +103,9 @@ export class LeagueComponent {
         }
 
         this.kits = this.sortByTeamName(this.kits);
-        this.loading = false
+        this.loading = false;
+        ;
+        this.columns = 'columns-' + Math.floor(Math.sqrt(this.kits.filter((kit) => kit['year'] === this.years[0]).length));
       })
     });
 
@@ -110,5 +126,11 @@ export class LeagueComponent {
       }
       return 0
     })
+  }
+
+  public print() {
+    setTimeout(() => {
+      window.print();
+    }, 500);
   }
 }

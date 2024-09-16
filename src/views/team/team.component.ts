@@ -20,6 +20,9 @@ import sortByName from '@services/sortByName';
     @else {
     <h2>
       {{ teamName.toUpperCase() }}
+      <span (click)="print()" class="print">
+        <img src="print.svg" alt="Print">
+      </span>
     </h2>
     <p class="competitions">
       @for (competition of competitions; track competition) {
@@ -77,6 +80,8 @@ import sortByName from '@services/sortByName';
     }
     h2 {
       margin-block-end: 0;
+      display: flex;
+      justify-content: space-between;
     }
     h2 a {
       text-decoration: none;
@@ -95,6 +100,9 @@ import sortByName from '@services/sortByName';
       display: flex;
       gap: 2em;
       margin-block-end: 1em;
+    }
+    .print {
+      cursor: pointer;
     }
   `,
 })
@@ -157,5 +165,11 @@ export class TeamComponent {
         this.templates.push(templates[template])
       }
     })
+  }
+
+  public print() {
+    setTimeout(() => {
+      window.print();
+    }, 500);
   }
 }

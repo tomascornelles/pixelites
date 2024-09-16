@@ -77,21 +77,14 @@ html {
     flex-direction: column;
   }
 
-  app-league article + article {
-    display: none;
-  }
-
   app-league .kit p {
     font-size: .5rem;
     margin-block-end: 0;
   }
 
   app-team .kit p,
-  app-team article h4 {
-    display: none;
-  }
-
-  app-team article:nth-child(n+6) {
+  app-team article h4,
+  .print {
     display: none;
   }
 
@@ -101,9 +94,92 @@ html {
     border: none;
     box-shadow: none;
     margin-block-end: 0;
+    display: block !important;
+  }
+
+  app-team article:nth-child(n+6),
+  app-league article:nth-child(n+2) {
+    display: none !important;
   }
 
   article {
     margin-block-start: 1rem;
+  }
+
+  .columns-1  {
+    width: 5cm;
+    margin-inline: auto;
+  }
+
+  .columns-2  {
+    width: 8cm;
+    margin-inline: auto;
+  }
+
+  .columns-3  {
+    width: 10cm;
+    margin-inline: auto;
+  }
+
+  .columns-4  {
+    width: 12cm;
+    margin-inline: auto;
+  }
+
+  .columns-5  {
+    width: 15cm;
+    margin-inline: auto;
+  }
+
+  .columns-6  {
+    width: 15cm;
+    margin-inline: auto;
+  }
+  .columns-6 .kit {
+    width: 2cm !important;
+  }
+
+  .columns-7  {
+    width: 15cm;
+    margin-inline: auto;
+  }
+  .columns-7 .kit {
+    width: 1.6cm !important;
+  }
+  .columns-7 .kit p {
+    font-size: .30rem;
+  }
+
+  .columns-8  {
+    width: 15cm;
+    margin-inline: auto;
+  }
+  .columns-8 .kit {
+    width: 1.4cm !important;
+  }
+  .columns-8 .kit p {
+    font-size: .30rem;
+  }
+
+  .columns-9  {
+    width: 15cm;
+    margin-inline: auto;
+  }
+  .columns-9 .kit {
+    width: 1.2cm !important;
+  }
+  .columns-9 .kit p {
+    font-size: .30rem;
+  }
+
+  .columns-10  {
+    width: 15cm;
+    margin-inline: auto;
+  }
+  .columns-10 .kit {
+    width: 1cm !important;
+  }
+  .columns-10 .kit p {
+    font-size: .30rem;
   }
 }

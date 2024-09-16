@@ -1,0 +1,11 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    path {
+      fill: black;
+    }
+    @media (prefers-color-scheme: dark) {
+      path { fill: white; }
+    }
+  </style>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M5 2H11V6H5V2ZM3 6V2V0H5H11H13V2V6H14H16V8V12V14H14H13V16H11H5H3V14H2H0V12V8V6H2H3ZM13 8H11H5H3H2V12H3V10H5H11H13V12H14V8H13ZM11 12H5V14H11V12Z" fill="black"/>
+</svg>
