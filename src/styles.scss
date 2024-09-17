@@ -14,6 +14,14 @@ html {
   background-color: var(--pico-background-color);
   box-shadow: var(--pico-box-shadow);
 }
+body {
+  margin-block-end: 5em;
+}
+
+article {
+  border: 1px solid var(--pico-primary-border);
+  box-shadow: 5px 5px 0 0 var(--pico-primary-border);
+}
 
 @media print {
   app-root > header {

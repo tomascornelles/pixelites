@@ -1,85 +1,90 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
+import { getAllKits } from '@api/loadData';
+import { isLogged } from '@services/login';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
   imports: [RouterModule, FormsModule],
   template: `
-  <nav
-    (keydown.f)="toggleMenu()"
-  >
-    <a [routerLink]="['/']">
-      <h1 class="title">
-        Pixelites
-      </h1>
-    </a>
+    <nav
+      (keydown.f)="toggleMenu()"
+    >
+      <a [routerLink]="['/']">
+        <h1 class="title">
+          Pixelites
+        </h1>
+      </a>
 
-    <ul>
-      <li>
-        <span
-          class="menu-toggle"
-          rel="next"
-          (click)="toggleMenu()"
-        >
-          <img src="search.svg" width="32" alt="Search" />
-        </span>
-      </li>
-    </ul>
-  </nav>
+      <ul>
+        <li>
+          <span
+            class="menu-toggle"
+            rel="next"
+            (click)="toggleMenu()"
+          >
+            <img src="search.svg" width="32" alt="Search" />
+          </span>
+        </li>
+      </ul>
+    </nav>
 
-  <dialog
+    @if ($isLogged) {
+      <button class="new-kit" [routerLink]="['/kit/new']"> + </button>
+    }
+
+    <dialog
     [open]="isOpen"
-    (keydown.esc)="toggleMenu()"
-  >
-    <article>
-      <header>
-        <span class="close" (click)="toggleMenu()" aria-label="Close" rel="prev"></span>
-        <input
-          placeholder="Search"
-          [(ngModel)]="$search"
-          name="search"
-          autocomplete="off"
-          (ngModelChange)="search($event)"
-          (keydown.enter)="selectFirstResult()"
-        >
-      </header>
-
-      <div class="list">
-        @if ($filteredLeagues.length > 0) {
-          <h3>
-            Leagues
-          </h3>
-        }
-        @for ($league of $filteredLeagues; track $league.slug) {
-          <button
-            class="outline"
-            [routerLink]="['/competition', $league.slug]"
-            (click)="toggleMenu()"
+      (keydown.esc)="toggleMenu()"
+    >
+      <article>
+        <header>
+          <span class="close" (click)="toggleMenu()" aria-label="Close" rel="prev"></span>
+          <input
+            placeholder="Search"
+            [(ngModel)]="$search"
+            name="search"
+            autocomplete="off"
+            (ngModelChange)="search($event)"
+            (keydown.enter)="selectFirstResult()"
           >
-            {{ $league.name }}
-          </button>
-        }
+        </header>
 
-        @if ($filteredTeams.length > 0) {
-          <h3>
-            Teams
-          </h3>
-        }
-        @for ($team of $filteredTeams; track $team.id) {
-          <button
-            class="outline"
-            [routerLink]="['/team', $team.slug]"
-            (click)="toggleMenu()"
-          >
-            {{ $team.name }}
-          </button>
-        }
-      </div>
-    </article>
-  </dialog>
+        <div class="list">
+          @if ($filteredLeagues.length > 0) {
+            <h3>
+              Leagues
+            </h3>
+          }
+          @for ($league of $filteredLeagues; track $league.slug) {
+            <button
+              class="outline"
+              [routerLink]="['/competition', $league.slug]"
+              (click)="toggleMenu()"
+            >
+              {{ $league.name }}
+            </button>
+          }
+
+          @if ($filteredTeams.length > 0) {
+            <h3>
+              Teams
+            </h3>
+          }
+          @for ($team of $filteredTeams; track $team.id) {
+            <button
+              class="outline"
+              [routerLink]="['/team', $team.slug]"
+              (click)="toggleMenu()"
+            >
+              {{ $team.name }}
+            </button>
+          }
+        </div>
+      </article>
+    </dialog>
   `,
   styles: `
     nav {
@@ -143,36 +148,32 @@ import { getTeams, getLeagues, countKits, countTeams } from '@api/loadData';
       overflow-y: auto;
       padding: 1rem;
     }
+    .new-kit {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      margin: 1rem;
+      padding: .5rem 1rem;
+    }
   `,
 })
 
 export class NavigationComponent {
-  $leagues;
+  $leagues = [];
   $filteredLeagues = [];
-  $teams;
+  $teams = [];
   $filteredTeams = [];
   $search = '';
   isOpen = false;
   $countKits = 0;
   $countTeams = 0;
+  $countLeagues = 0;
+  $isLogged = isLogged();
 
   ngOnInit() {
-    getLeagues().then((leagues) => {
-      this.$leagues = leagues;
-      this.$filteredLeagues = this.$leagues
-    })
-
-    getTeams().then((teams) => {
-      this.$teams = teams;
-      this.$filteredTeams = this.$teams
-    })
-
-    countKits().then((count) => {
-      this.$countKits = +count
-    })
-
-    countTeams().then((count) => {
-      this.$countTeams = +count
+    getAllKits().then((kits) => {
+      this.filterTeams(kits);
+      this.filterLeagues(kits)
     })
   }
 
@@ -207,5 +208,32 @@ export class NavigationComponent {
   selectFirstResult() {
     const button: HTMLButtonElement = document.querySelector('button:first-of-type');
     button.click();
+  }
+
+  filterTeams(data) {
+    const teamList = {};
+    for (let team in data) {
+      if (!teamList[data[team]['teamSlug']]) {
+        teamList[data[team]['teamSlug']] = data[team]['team'];
+        this.$teams.push({name: data[team]['team'], slug: data[team]['teamSlug']});
+      }
+    }
+
+    this.$filteredTeams = this.$teams;
+    this.$countTeams = this.$teams.length;
+    this.$countKits = data.length;
+  }
+
+  filterLeagues(data) {
+    const leagueList = {};
+    for (let league in data) {
+      if (!leagueList[data[league]['competitionSlug']]) {
+        leagueList[data[league]['competitionSlug']] = data[league]['competition'];
+        this.$leagues.push({name: data[league]['competition'], slug: data[league]['competitionSlug']});
+      }
+    }
+
+    this.$filteredLeagues = this.$leagues;
+    this.$countLeagues = this.$leagues.length;
   }
 }

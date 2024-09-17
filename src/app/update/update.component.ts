@@ -5,20 +5,38 @@ import { supabase } from '@api/supabase';
   selector: 'app-update',
   standalone: true,
   imports: [],
-  templateUrl: './update.component.html',
+  template: `
+    @if (complete) {
+    <p>update works!</p>
+    }
+    @else {
+    <p>Updating ... {{ percentage }}%</p>
+    <progress max="100" value="{{ percentage }}"></progress>
+    <p>{{ current }} / {{ total }}</p>
+    }
+  `,
   styleUrl: './update.component.scss'
 })
 export class UpdateComponent {
   allKits: any;
+  complete: boolean = false;
+  total: number = 0;
+  current: number = 0;
+  percentage: number = 0;
 
   ngOnInit() {
     this.getKits().then((data) => {
       this.allKits = data;
+      this.total = Object.keys(this.allKits).length;
 
       for (let kit in this.allKits) {
+        this.current += 1;
+        this.percentage = Math.round(this.current / this.total * 100);
         this.allKits[kit]['competitionSlug'] = this.textToSlug(this.allKits[kit]['competition']);
         this.updateKit(this.allKits[kit]);
       }
+
+      this.complete = true;
     });
   }
 
@@ -26,8 +44,8 @@ export class UpdateComponent {
     const { data, error } = await supabase
     .from('kits')
     .select('*')
-    .gte('id', 300)
-    .lt('id', 400)
+    // .gte('id', 300)
+    // .lt('id', 400)
 
     return data || error;
   }

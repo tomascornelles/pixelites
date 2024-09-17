@@ -191,6 +191,25 @@ const login = async (email, password) => {
   return data || error;
 }
 
+const getLatestUpdate = async () => {
+  const { data, error } = await supabase
+  .from('kits')
+  .select('*')
+  .order('created_at', { ascending: false })
+  .limit(1)
+  .single();
+
+  return data || error;
+}
+
+const getAllKits = async () => {
+  const { data, error } = await supabase
+  .from('kits')
+  .select('*');
+
+  return data || error;
+}
+
 export {
   loadData,
   getTeams,
@@ -208,4 +227,5 @@ export {
   countKits,
   countTeams,
   login,
+  getAllKits,
 };
