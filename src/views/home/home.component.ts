@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { getLatestKits, getTemplates, countKits, countTeams } from '@api/loadData';
+import { getStats } from '@api/getStats';
 
 @Component({
   selector: 'app-home',
@@ -16,13 +17,13 @@ import { getLatestKits, getTemplates, countKits, countTeams } from '@api/loadDat
       <article aria-busy="true">Loading</article>
     }
     @else {
-        @if ($countKits > 0 || $countTeams > 0) {
+        @if ($stats.kits > 0 || $stats.teams > 0 || $stats.competitions > 0) {
         <article>
           <header>
             <h2>Overview</h2>
           </header>
           <p>
-            There are <strong>{{$countKits}}</strong> kits and <strong>{{$countTeams }}</strong> teams
+            There are <strong>{{$stats.kits}}</strong> kits from <strong>{{$stats.teams }}</strong> teams in <strong>{{$stats.competitions}}</strong> competitions
           </p>
           <p>
             Last updated: {{ $lastUppdated }}
@@ -75,6 +76,11 @@ export class HomeComponent {
   $countTeams = 0;
   $lastUppdated = '';
   loading = true;
+  $stats = {
+    kits: 0,
+    teams: 0,
+    competitions: 0,
+  }
 
   constructor(private route: ActivatedRoute) { }
 
@@ -92,19 +98,14 @@ export class HomeComponent {
       })
     });
 
+    getStats().then((stats) => {
+      this.$stats = JSON.parse(stats['data']);
+    })
+
     getTemplates().then((templates) => {
       for (let template in templates) {
         this.templates.push(templates[template])
       }
     })
-
-    countKits().then((count) => {
-      this.$countKits = +count
-    })
-
-    countTeams().then((count) => {
-      this.$countTeams = +count
-    })
-
-  }
+   }
 }

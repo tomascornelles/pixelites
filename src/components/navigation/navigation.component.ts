@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { getAllKits } from '@api/loadData';
 import { isLogged } from '@services/login';
+import { getTeams } from '@api/getTeams';
+import { getCompetitions } from '@api/getCompetitions';
 
 @Component({
   selector: 'app-navigation',
@@ -58,7 +60,7 @@ import { isLogged } from '@services/login';
               Leagues
             </h3>
           }
-          @for ($league of $filteredLeagues; track $league.slug) {
+          @for ($league of $filteredLeagues; track $league) {
             <button
               class="outline"
               [routerLink]="['/competition', $league.slug]"
@@ -73,7 +75,7 @@ import { isLogged } from '@services/login';
               Teams
             </h3>
           }
-          @for ($team of $filteredTeams; track $team.id) {
+          @for ($team of $filteredTeams; track $team) {
             <button
               class="outline"
               [routerLink]="['/team', $team.slug]"
@@ -149,11 +151,15 @@ import { isLogged } from '@services/login';
       padding: 1rem;
     }
     .new-kit {
+      font-size: 3rem;
+      line-height: 1;
       position: fixed;
       right: 0;
       bottom: 0;
       margin: 1rem;
-      padding: .5rem 1rem;
+      padding: .2em .4em;
+      box-shadow: 5px 5px 0 0 var(--pico-primary);
+      text-shadow: 2px 2px 0 var(--pico-muted-border-color)
     }
   `,
 })
@@ -171,10 +177,29 @@ export class NavigationComponent {
   $isLogged = isLogged();
 
   ngOnInit() {
-    getAllKits().then((kits) => {
-      this.filterTeams(kits);
-      this.filterLeagues(kits)
+    getTeams().then((data) => {
+      const dataParsed = this.parseData(JSON.parse(JSON.parse(JSON.stringify(data)).data));
+      this.$teams = dataParsed;
+      this.$filteredTeams = dataParsed;
     })
+    getCompetitions().then((data) => {
+      const dataParsed = this.parseData(JSON.parse(JSON.parse(JSON.stringify(data)).data));
+      this.$leagues = dataParsed;
+      this.$filteredLeagues = dataParsed;
+    })
+  }
+
+  parseData(data) {
+    const parsedData = [];
+    for (let league in data) {
+      parsedData.push({
+        name: data[league]['name'],
+        slug: league,
+        count: data[league]['count']
+      })
+    }
+
+    return parsedData;
   }
 
   toggleMenu() {
@@ -206,34 +231,7 @@ export class NavigationComponent {
   }
 
   selectFirstResult() {
-    const button: HTMLButtonElement = document.querySelector('button:first-of-type');
+    const button: HTMLButtonElement = document.querySelector('dialog button:first-of-type');
     button.click();
-  }
-
-  filterTeams(data) {
-    const teamList = {};
-    for (let team in data) {
-      if (!teamList[data[team]['teamSlug']]) {
-        teamList[data[team]['teamSlug']] = data[team]['team'];
-        this.$teams.push({name: data[team]['team'], slug: data[team]['teamSlug']});
-      }
-    }
-
-    this.$filteredTeams = this.$teams;
-    this.$countTeams = this.$teams.length;
-    this.$countKits = data.length;
-  }
-
-  filterLeagues(data) {
-    const leagueList = {};
-    for (let league in data) {
-      if (!leagueList[data[league]['competitionSlug']]) {
-        leagueList[data[league]['competitionSlug']] = data[league]['competition'];
-        this.$leagues.push({name: data[league]['competition'], slug: data[league]['competitionSlug']});
-      }
-    }
-
-    this.$filteredLeagues = this.$leagues;
-    this.$countLeagues = this.$leagues.length;
   }
 }

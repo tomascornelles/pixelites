@@ -32,10 +32,10 @@ export const routes: Routes = [
     path: 'kit/update/:id',
     component: NewKitComponent,
   },
-  // {
-  //   path: 'update',
-  //   component: UpdateComponent,
-  // },
+  {
+    path: 'update',
+    component: UpdateComponent,
+  },
   {
     path: 'login',
     component: LoginComponent,

@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { supabase } from '@api/supabase';
+import { updateTeams } from '@api/updateTeams';
+import { updateCompetitions } from '@api/updateCompetitions';
+import {updateStats} from '@api/updateStats';
 
 @Component({
   selector: 'app-update',
@@ -23,6 +26,9 @@ export class UpdateComponent {
   total: number = 0;
   current: number = 0;
   percentage: number = 0;
+  $teamList = {};
+  $competitionList = {};
+  $statsList = {};
 
   ngOnInit() {
     this.getKits().then((data) => {
@@ -34,7 +40,29 @@ export class UpdateComponent {
         this.percentage = Math.round(this.current / this.total * 100);
         this.allKits[kit]['competitionSlug'] = this.textToSlug(this.allKits[kit]['competition']);
         this.updateKit(this.allKits[kit]);
+
+        if (!this.$teamList[this.allKits[kit]['teamSlug']]) {
+          this.$teamList[this.allKits[kit]['teamSlug']] = {name: this.allKits[kit]['team'], count: 1};
+        } else {
+          this.$teamList[this.allKits[kit]['teamSlug']]['count'] = this.$teamList[this.allKits[kit]['teamSlug']]['count'] + 1
+        }
+
+        if (!this.$competitionList[this.allKits[kit]['competitionSlug']]) {
+          this.$competitionList[this.allKits[kit]['competitionSlug']] = {name: this.allKits[kit]['competition'], count: 1};
+        } else {
+          this.$competitionList[this.allKits[kit]['competitionSlug']]['count'] = this.$competitionList[this.allKits[kit]['competitionSlug']]['count'] + 1
+        }
       }
+
+      this.$statsList = {
+        teams: Object.keys(this.$teamList).length,
+        competitions: Object.keys(this.$competitionList).length,
+        kits: this.total
+      }
+
+      updateTeams(this.$teamList);
+      updateCompetitions(this.$competitionList);
+      updateStats(this.$statsList);
 
       this.complete = true;
     });
@@ -44,8 +72,9 @@ export class UpdateComponent {
     const { data, error } = await supabase
     .from('kits')
     .select('*')
-    // .gte('id', 300)
-    // .lt('id', 400)
+    // .gte('id', 1)
+    // .lt('id', 10)
+    // .eq('id', 50)
 
     return data || error;
   }
@@ -55,6 +84,34 @@ export class UpdateComponent {
     .from('kits')
     .update(kit)
     .eq('id', kit.id);
+  }
+
+  private checkTeam = async (team, name) => {
+    if (!this.$teamList[team]) {
+      this.$teamList[team] = name;
+    } else {
+      this.$teamList[team]['count'] = this.$teamList[team]['count'] + 1
+    }
+  }
+
+  private getTeams = async () => {
+    const { data, error } = await supabase
+    .from('lists')
+    .select('*')
+    .eq('name', 'teams');
+
+    return data || error;
+  }
+
+  private createTeam = async (team, name) => {
+    console.log('> create team', team, name);
+    const { data, error } = await supabase
+    .from('teams')
+    .insert({
+      id: team,
+      name: name,
+      count: 1,
+    });
   }
 
   private textToSlug(text) {

@@ -3,8 +3,14 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { KitComponent } from '@components/kit/kit.component';
 import { LoginComponent } from '@views/login/login.component';
 import { isLogged } from '@services/login';
-import { getTeams, getLeagues, getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
+import { getTemplates, saveKit, getKit, updateKit, deleteKit } from '@api/loadData';
+import { getCompetitions } from '@api/getCompetitions';
+import { getTeams } from '@api/getTeams';
+import { updateTeams } from '@api/updateTeams';
+import { updateCompetitions } from '@api/updateCompetitions';
+import { updateStats } from '@api/updateStats';
 import { FormsModule } from '@angular/forms';
+import {count} from 'console';
 
 type Kit = {
   name: string
@@ -31,9 +37,6 @@ type Kit = {
   template: `
     @if (!$isLoggedIn) {
       <app-login (loggedIn)="init()"></app-login>
-    }
-    @else if (loading) {
-      <article aria-busy="true">Loading</article>
     }
     @else {
       <article>
@@ -102,14 +105,14 @@ type Kit = {
             <input type="text" id="team" name="team" [(ngModel)]="kit['team']" list="teams" placeholder="Team" autocomplete="off">
             <datalist id="teams">
               @for (team of $teams; track team) {
-                <option value="{{ team['name'] }}"></option>
+                <option value="{{ team.name }}"></option>
               }
             </datalist>
 
             <input type="text" id="competition" name="competition" [(ngModel)]="kit['competition']" list="competitions" placeholder="Competition" autocomplete="off">
             <datalist id="competitions">
               @for (competition of $competitions; track competition) {
-                <option value="{{ competition['name'] }}"></option>
+                <option value="{{ competition.name }}"></option>
               }
             </datalist>
           </div>
@@ -224,7 +227,11 @@ export class NewKitComponent {
   templateColor = Math.floor(Math.random() * 6);
   templateBase = Math.ceil(Math.random() * 4);
   $teams = [];
+  $initTeams = {};
+  $initTeam = null;
   $competitions = [];
+  $initCompetition = null;
+  $initCompetitions = {};
   $id = null;
   loading = true;
   wantDelete = false;
@@ -241,14 +248,16 @@ export class NewKitComponent {
       this.$isLoggedIn = true;
 
       getTeams().then((teams) => {
-        for (let team in teams) {
-          this.$teams.push(teams[team]);
+        this.$initTeams = JSON.parse(teams['data']);
+        for (let team in JSON.parse(teams['data'])) {
+          this.$teams.push(JSON.parse(teams['data'])[team]);
         }
       });
 
-      getLeagues().then((competitions) => {
-        for (let competition in competitions) {
-          this.$competitions.push(competitions[competition]);
+      getCompetitions().then((competitions) => {
+        this.$initCompetitions = JSON.parse(competitions['data']);
+        for (let competition in JSON.parse(competitions['data'])) {
+          this.$competitions.push(JSON.parse(competitions['data'])[competition]);
         }
       });
 
@@ -264,6 +273,8 @@ export class NewKitComponent {
               for (let kit in kits) {
                 this.kit = kits[kit];
               }
+              this.$initTeam = this.kit['teamSlug'];
+              this.$initCompetition = this.kit['competitionSlug'];
             })
           } else {
             this.initKit();
@@ -284,7 +295,7 @@ export class NewKitComponent {
   public setLayers() {
     setTimeout(() => {
       this.print(this.kit);
-    }, 500);
+    }, 1000);
   }
 
   private print(kit) {
@@ -414,10 +425,63 @@ export class NewKitComponent {
     }
   }
 
+  private checkNewCompetition(competition) {
+    const filtered = this.$competitions.filter((item) => item.slug === competition);
+    return filtered.length === 0;
+  }
+
+  private checkTeamsList() {
+    if (!this.$initTeams[this.kit['teamSlug']]) {
+      this.$initTeams[this.kit['teamSlug']] = {
+        name: this.kit['team'],
+        count: 1,
+      };
+    } else {
+      this.$initTeams[this.kit['teamSlug']]['count'] = this.$initTeams[this.kit['teamSlug']]['count'] + 1;
+    }
+
+    if (this.kit['teamSlug'] !== this.$initTeam) {
+      if (this.$initTeams[this.$initTeam]['count'] === 1) {
+        delete this.$initTeams[this.$initTeam];
+      } else {
+        this.$initTeams[this.$initTeam]['count'] = this.$initTeams[this.$initTeam]['count'] - 1;
+      }
+    }
+
+    updateTeams(this.$initTeams);
+    this.$initTeam = this.kit['teamSlug'];
+  }
+
+  private checkCompetitionsList() {
+    if (!this.$initCompetitions[this.kit['competitionSlug']]) {
+      this.$initCompetitions[this.kit['competitionSlug']] = {
+        name: this.kit['competition'],
+        count: 1,
+      };
+    } else {
+      this.$initCompetitions[this.kit['competitionSlug']]['count'] = this.$initCompetitions[this.kit['competitionSlug']]['count'] + 1;
+    }
+
+    if (this.kit['competitionSlug'] !== this.$initCompetitions) {
+      if (this.$initCompetitions[this.$initCompetition]['count'] === 1) {
+        delete this.$initCompetitions[this.$initCompetition];
+      } else {
+        this.$initCompetitions[this.$initCompetition]['count'] = this.$initCompetitions[this.$initCompetition]['count'] - 1;
+      }
+    }
+
+    updateCompetitions(this.$initCompetitions);
+    this.$initCompetition = this.kit['competitionSlug'];
+
+  }
+
   public save() {
     this.loading = true;
     this.setTeam(this.kit['team'].trim());
     this.setCompetition(this.kit['competition'].trim());
+
+    this.checkTeamsList();
+    this.checkCompetitionsList();
 
     if (this.$id) {
       updateKit(this.kit).then(() => {
