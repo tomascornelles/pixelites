@@ -107,7 +107,8 @@ const getKit = async (id) => {
   const { data, error } = await supabase
   .from('kits')
   .select('*')
-  .eq('id', id);
+  .eq('id', id)
+  .single();
 
   return data || error;
 }

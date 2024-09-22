@@ -39,7 +39,7 @@ export class UpdateComponent {
         this.current += 1;
         this.percentage = Math.round(this.current / this.total * 100);
         this.allKits[kit]['competitionSlug'] = this.textToSlug(this.allKits[kit]['competition']);
-        this.updateKit(this.allKits[kit]);
+        // this.updateKit(this.allKits[kit]);
 
         if (!this.$teamList[this.allKits[kit]['teamSlug']]) {
           this.$teamList[this.allKits[kit]['teamSlug']] = {name: this.allKits[kit]['team'], count: 1};
