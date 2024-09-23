@@ -9,16 +9,30 @@ import { getStats } from '@api/getStats';
   standalone: true,
   imports: [KitComponent, RouterModule],
   template: `
-    <blockquote>
-      Remember those kits that made you vibrate on the pitch? In Pixelites, we revive the magic of football through 8x6 pixel designs. Each kit is a journey through time, a time capsule capturing the essence of an era and a team. Explore our extensive collection, organized by year and competition, and discover hidden treasures from the past. Pixelites is more than just a collection, it's a celebration of football history!
-    </blockquote>
+    <article class='hero'>
+      <div>
+        <h2>Welcome</h2>
+        <p>
+          Do you remember those games of yesteryear where in a few pixels we saw all the soccer teams in the world?
+        </p>
+        <p>
+          With Pixelites we try to achieve that minimalist experience with just 6x8 pixels to differentiate the colors of each team, and even the evolution of their kits.
+          </p>
+          <p>
+            Enjoy browsing with the search engine <img src="search.svg" alt="search icon" width="16">, jumping between competitions and take the opportunity to print <img src="print.svg" alt="print icon" width="16"> beautiful posters of your favorite league or team.
+        </p>
+      </div>
+      <div class="poster">
+        <img src="poster.png" alt="pixelites poster">
+      </div>
+    </article>
 
     @if (loading) {
       <article aria-busy="true">Loading</article>
     }
     @else {
         @if ($stats.kits > 0 || $stats.teams > 0 || $stats.competitions > 0) {
-        <article>
+        <article class="overview">
           <header>
             <h2>Overview</h2>
           </header>
@@ -31,7 +45,7 @@ import { getStats } from '@api/getStats';
         </article>
       }
 
-      <article>
+      <article class="kits">
         <header>
           <h2>Latest kits</h2>
         </header>
@@ -64,6 +78,42 @@ import { getStats } from '@api/getStats';
       flex-wrap: wrap;
       gap: 1em;
       justify-content: space-between;
+    }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1em;
+    }
+    @media (max-width: 768px) {
+      .hero > div {
+        width: 60vw
+      }
+      .hero .poster {
+        overflow: hidden;
+        width: 33vw;
+      }
+      .poster img {
+        width: 50vw;
+        max-width: 400px;
+      }
+    }
+    @media (max-width: 500px) {
+      .hero {
+        flex-direction: column;
+      }
+      .hero > div {
+        width: 100%;
+      }
+      .hero .poster {
+        overflow: hidden;
+        width: 100%;
+        height: 40vw;
+      }
+      .poster img {
+        max-height: auto;
+        width: 100%;
+      }
     }
   `,
 })
