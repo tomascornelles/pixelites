@@ -40,6 +40,8 @@ import { getCompetitions } from '@api/getCompetitions';
     <dialog
     [open]="isOpen"
       (keydown.esc)="toggleMenu()"
+      (keydown.arrowdown)="selectNextResult()"
+      (keydown.arrowup)="selectPreviousResult()"
     >
       <article>
         <header>
@@ -50,7 +52,7 @@ import { getCompetitions } from '@api/getCompetitions';
             name="search"
             autocomplete="off"
             (ngModelChange)="search($event)"
-            (keydown.enter)="selectFirstResult()"
+            (keydown.enter)="selectResult()"
           >
         </header>
 
@@ -130,7 +132,7 @@ import { getCompetitions } from '@api/getCompetitions';
       align-items: flex-start;
     }
     dialog h3 {
-      margin-block: 0;
+      margin-block: 0 1em;
     }
     article button {
       display: block;
@@ -139,16 +141,16 @@ import { getCompetitions } from '@api/getCompetitions';
       margin-inline-end: 0;
       transition: all .3s;
     }
-    article button:first-of-type {
-      border: 5px solid currentColor;
-    }
     article {
       padding: 0;
       overflow-x: hidden;
     }
-    article button:hover {
+    article button.selected {
       box-shadow: 5px 5px 0 0 var(--pico-primary);
       translate: -5px -5px;
+    }
+    article button:hover {
+      background-color: var(--pico-primary-focus);
     }
     .list {
       max-height: 70vh;
@@ -179,12 +181,14 @@ export class NavigationComponent {
   $countTeams = 0;
   $countLeagues = 0;
   $isLogged = isLogged();
+  $selectedIndex = 0;
 
   ngOnInit() {
     getTeams().then((data) => {
       const dataParsed = this.parseData(JSON.parse(JSON.parse(JSON.stringify(data)).data));
       this.$teams = dataParsed;
       this.$filteredTeams = dataParsed;
+      this.selectCurrentResult();
     })
     getCompetitions().then((data) => {
       const dataParsed = this.parseData(JSON.parse(JSON.parse(JSON.stringify(data)).data));
@@ -242,7 +246,9 @@ export class NavigationComponent {
   resetSearch() {
     this.$search = '';
     this.$filteredLeagues = this.$leagues
-    this.$filteredTeams = []
+    this.$filteredTeams = [];
+    this.$selectedIndex = 0;
+    this.selectCurrentResult();
   }
 
   search($event) {
@@ -254,10 +260,36 @@ export class NavigationComponent {
       this.$filteredLeagues = this.$leagues.filter((league) => (league.name.toLowerCase().includes($event.toLowerCase())))
       this.$filteredTeams = this.$teams.filter((team) => team.name.toLowerCase().includes($event.toLowerCase()))
     }
+
+    this.$selectedIndex = 0;
+    this.selectCurrentResult();
   }
 
-  selectFirstResult() {
-    const button: HTMLButtonElement = document.querySelector('dialog button:first-of-type');
+  selectCurrentResult() {
+    const buttons = document.querySelectorAll('dialog button');
+    buttons.forEach((button) => {
+      button.classList.remove('selected');
+    })
+    buttons[this.$selectedIndex].classList.add('selected');
+  }
+
+  selectResult() {
+    const button: HTMLButtonElement = document.querySelector(`dialog button:nth-of-type(${this.$selectedIndex + 1})`);
     button.click();
+  }
+
+  selectNextResult() {
+    const elements = document.querySelectorAll('dialog button');
+    if (this.$selectedIndex < elements.length) {
+      this.$selectedIndex++;
+    }
+    this.selectCurrentResult();
+  }
+
+  selectPreviousResult() {
+    if (this.$selectedIndex > 0) {
+      this.$selectedIndex--;
+    }
+    this.selectCurrentResult();
   }
 }
