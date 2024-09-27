@@ -134,7 +134,7 @@ type Kit = {
         </div>
 
         <footer>
-          <button type="button" (click)="save()" class="secondary">save</button>
+          <button type="button" (click)="save()">save</button>
           <div role="group">
             @if (this.$id) {
               <a [routerLink]="['/kit/new']" role="button" class="outline">

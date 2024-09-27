@@ -137,6 +137,7 @@ import { getCompetitions } from '@api/getCompetitions';
       width: 100%;
       margin-block-end: .5rem;
       margin-inline-end: 0;
+      transition: all .3s;
     }
     article button:first-of-type {
       border: 5px solid currentColor;
@@ -144,6 +145,10 @@ import { getCompetitions } from '@api/getCompetitions';
     article {
       padding: 0;
       overflow-x: hidden;
+    }
+    article button:hover {
+      box-shadow: 5px 5px 0 0 var(--pico-primary);
+      translate: -5px -5px;
     }
     .list {
       max-height: 70vh;
@@ -159,7 +164,6 @@ import { getCompetitions } from '@api/getCompetitions';
       margin: 1rem;
       padding: .2em .4em;
       box-shadow: 5px 5px 0 0 var(--pico-primary);
-      text-shadow: 2px 2px 0 var(--pico-muted-border-color)
     }
   `,
 })
@@ -175,6 +179,23 @@ export class NavigationComponent {
   $countTeams = 0;
   $countLeagues = 0;
   $isLogged = isLogged();
+  flags = {
+    'usa canada': '🇺🇸 🇨🇦',
+    'england': '🇬🇧',
+    'germany': '🇩🇪',
+    'spain': '🇪🇸',
+    'france': '🇫🇷',
+    'italy': '🇮🇹',
+    'japan': '🇯🇵',
+    'scotland': '🇬🇧',
+    'portugal': '🇵🇹',
+    'austria': '🇦🇹',
+    'netherlands': '🇳🇱',
+    'belgium': '🇧🇪',
+    'colombia': '🇨🇴',
+    'argentina': '🇦🇷',
+    'brazil': '🇧🇷',
+  }
 
   ngOnInit() {
     getTeams().then((data) => {
@@ -192,7 +213,7 @@ export class NavigationComponent {
   parseData(data) {
     let parsedData = [];
     const local = [];
-    const internatinoal = [];
+    const international = [];
 
     for (let league in data) {
       parsedData.push({
@@ -214,13 +235,17 @@ export class NavigationComponent {
 
     parsedData.forEach((league) => {
       if (!league['name'].includes('(')) {
-        internatinoal.push(league);
+        league['name'] = '🌐 ' + league['name'];
+        international.push(league);
       } else {
+        if (this.flags[league['name'].toLowerCase().split('(')[1].split(')')[0]]) {
+          league['name'] = this.flags[league['name'].toLowerCase().split('(')[1].split(')')[0]] + ' ' + league['name'].split(' (')[0];
+        }
         local.push(league);
       }
     })
 
-    return [...internatinoal, ...local];
+    return [...international, ...local];
   }
 
   toggleMenu() {

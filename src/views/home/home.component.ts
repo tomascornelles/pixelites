@@ -19,7 +19,7 @@ import { getStats } from '@api/getStats';
           With Pixelites we try to achieve that minimalist experience with just 6x8 pixels to differentiate the colors of each team, and even the evolution of their kits.
           </p>
           <p>
-            Enjoy browsing with the search engine <img src="search.svg" alt="search icon" width="16">, jumping between competitions and take the opportunity to print <img src="print.svg" alt="print icon" width="16"> beautiful posters of your favorite league or team.
+            Enjoy browsing with the search engine <img src="search.svg" alt="search icon" width="16">, jumping between competitions and take the opportunity to print <img src="print.svg" alt="print icon" width="16"> beautiful posters of your favorite league or team or click in a kit to download as an avatar for your social media.
         </p>
       </div>
       <div class="poster">
@@ -33,9 +33,6 @@ import { getStats } from '@api/getStats';
     @else {
         @if ($stats.kits > 0 || $stats.teams > 0 || $stats.competitions > 0) {
         <article class="overview">
-          <header>
-            <h2>Overview</h2>
-          </header>
           <p>
             There are <strong>{{$stats.kits}}</strong> kits from <strong>{{$stats.teams }}</strong> teams in <strong>{{$stats.competitions}}</strong> competitions
           </p>
@@ -85,7 +82,7 @@ import { getStats } from '@api/getStats';
       align-items: center;
       gap: 1em;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       .hero > div {
         width: 60vw
       }
