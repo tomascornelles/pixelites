@@ -72,6 +72,7 @@ export class UpdateComponent {
     const { data, error } = await supabase
     .from('kits')
     .select('*')
+    .limit(1200)
     // .gte('id', 1)
     // .lt('id', 10)
     // .eq('id', 50)

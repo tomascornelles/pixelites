@@ -190,7 +190,10 @@ export class NavigationComponent {
   }
 
   parseData(data) {
-    const parsedData = [];
+    let parsedData = [];
+    const local = [];
+    const internatinoal = [];
+
     for (let league in data) {
       parsedData.push({
         name: data[league]['name'],
@@ -199,7 +202,25 @@ export class NavigationComponent {
       })
     }
 
-    return parsedData;
+    parsedData = parsedData.sort((a, b) => {
+      if (a['name'] < b['name']) {
+        return -1
+      }
+      if (a['name'] > b['name']) {
+        return 1
+      }
+      return 0
+    });
+
+    parsedData.forEach((league) => {
+      if (!league['name'].includes('(')) {
+        internatinoal.push(league);
+      } else {
+        local.push(league);
+      }
+    })
+
+    return [...internatinoal, ...local];
   }
 
   toggleMenu() {
