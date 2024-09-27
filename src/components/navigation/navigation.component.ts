@@ -179,23 +179,6 @@ export class NavigationComponent {
   $countTeams = 0;
   $countLeagues = 0;
   $isLogged = isLogged();
-  flags = {
-    'usa canada': '🇺🇸 🇨🇦',
-    'england': '🇬🇧',
-    'germany': '🇩🇪',
-    'spain': '🇪🇸',
-    'france': '🇫🇷',
-    'italy': '🇮🇹',
-    'japan': '🇯🇵',
-    'scotland': '🇬🇧',
-    'portugal': '🇵🇹',
-    'austria': '🇦🇹',
-    'netherlands': '🇳🇱',
-    'belgium': '🇧🇪',
-    'colombia': '🇨🇴',
-    'argentina': '🇦🇷',
-    'brazil': '🇧🇷',
-  }
 
   ngOnInit() {
     getTeams().then((data) => {
@@ -238,9 +221,6 @@ export class NavigationComponent {
         league['name'] = '🌐 ' + league['name'];
         international.push(league);
       } else {
-        if (this.flags[league['name'].toLowerCase().split('(')[1].split(')')[0]]) {
-          league['name'] = this.flags[league['name'].toLowerCase().split('(')[1].split(')')[0]] + ' ' + league['name'].split(' (')[0];
-        }
         local.push(league);
       }
     })
