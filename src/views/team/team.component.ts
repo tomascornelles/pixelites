@@ -41,7 +41,7 @@ import sortByName from '@services/sortByName';
         @for (competition of competitions; track competition) {
           @if (competitions.length > 1 && yearsAndCompetitions[year][competition['slug']]) {
           <h4>
-            {{competition['name']}}
+            <a [routerLink]="['/competition', competition['slug']]">{{competition['name']}}</a>
           </h4>
           }
 

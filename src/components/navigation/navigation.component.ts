@@ -38,7 +38,7 @@ import { getCompetitions } from '@api/getCompetitions';
     }
 
     <dialog
-    [open]="isOpen"
+      [open]="isOpen"
       (keydown.esc)="toggleMenu()"
       (keydown.arrowdown)="selectNextResult()"
       (keydown.arrowup)="selectPreviousResult()"

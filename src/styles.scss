@@ -96,9 +96,18 @@ article {
   }
 
   app-team .kit p,
-  app-team article h4,
   .print {
     display: none;
+  }
+
+  app-team article h4 a {
+    text-decoration: none;
+    color: lightgrey;
+  }
+
+  app-team article h4 {
+    font-size: .7rem;
+    margin-block: -.7rem 0;
   }
 
   article,
