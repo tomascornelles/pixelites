@@ -191,13 +191,13 @@ export class NavigationComponent {
       this.selectCurrentResult();
     })
     getCompetitions().then((data) => {
-      const dataParsed = this.parseData(JSON.parse(JSON.parse(JSON.stringify(data)).data));
+      const dataParsed = this.parseData(JSON.parse(JSON.parse(JSON.stringify(data)).data), true);
       this.$leagues = dataParsed;
       this.$filteredLeagues = dataParsed;
     })
   }
 
-  parseData(data) {
+  parseData(data, isLeague = false) {
     let parsedData = [];
     const local = [];
     const international = [];
@@ -221,7 +221,7 @@ export class NavigationComponent {
     });
 
     parsedData.forEach((league) => {
-      if (!league['name'].includes('(')) {
+      if (isLeague && !league['name'].includes('(')) {
         league['name'] = '🌐 ' + league['name'];
         international.push(league);
       } else {
