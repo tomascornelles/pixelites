@@ -28,6 +28,7 @@ type Kit = {
   layer1Color: string
   layer2Color: string
   layer3Color: string
+  sport?: string
 }
 
 @Component({
@@ -50,14 +51,18 @@ type Kit = {
         <div class="form">
           <div role="group">
             <label for="jersey">Jersey</label>
-            <label for="pants">Pants</label>
-            <label for="socks">Socks</label>
+            @if (kit['sport'] === 'football') {
+              <label for="pants">Pants</label>
+              <label for="socks">Socks</label>
+            }
           </div>
 
           <div role="group">
             <input type="color" id="jersey" name="jersey" [(ngModel)]="kit['jersey']" (input)="setLayers()" list="colors">
-            <input type="color" id="pants" name="Pants" [(ngModel)]="kit['pants']" (input)="setLayers()" list="colors">
-            <input type="color" id="socks" name="Socks" [(ngModel)]="kit['socks']" (input)="setLayers()" list="colors">
+            @if (kit['sport'] === 'football') {
+              <input type="color" id="pants" name="Pants" [(ngModel)]="kit['pants']" (input)="setLayers()" list="colors">
+              <input type="color" id="socks" name="Socks" [(ngModel)]="kit['socks']" (input)="setLayers()" list="colors">
+            }
             <datalist id="colors">
               @for (color of config.colors; track color) {
                 <option>{{ color }}</option>
@@ -118,18 +123,35 @@ type Kit = {
                 <option value="{{ competition.name }}"></option>
               }
             </datalist>
+
+            <select name="sport" id="sport" [(ngModel)]="kit['sport']" (change)="setLayers()">
+              <option disabled>Sport</option>
+              <option value="football">Football</option>
+              <option value="basketball">Basketball</option>
+            </select>
           </div>
         </div>
 
         <div role="group">
-          <select id="name" name="name" [(ngModel)]="kit['name']">
-            <option value="Home">Home</option>
-            <option value="Home alt">Home alt</option>
-            <option value="Away">Away</option>
-            <option value="Third">Third</option>
-            <option value="Fourth">Fourth</option>
-            <option value="Special">Special</option>
-          </select>
+          @if (kit['sport'] === 'basketball') {
+            <select id="name" name="name" [(ngModel)]="kit['name']">
+              <option value="Asociation">Asociation</option>
+              <option value="Icon">Icon</option>
+              <option value="Statement">Statement</option>
+              <option value="City">City</option>
+              <option value="Classic">Classic</option>
+              <option value="Special">Special</option>
+            </select>
+          } @else {
+            <select id="name" name="name" [(ngModel)]="kit['name']">
+              <option value="Home">Home</option>
+              <option value="Home alt">Home alt</option>
+              <option value="Away">Away</option>
+              <option value="Third">Third</option>
+              <option value="Fourth">Fourth</option>
+              <option value="Special">Special</option>
+            </select>
+          }
           <input type="number" id="year" name="year" [(ngModel)]="kit['year']">
         </div>
 
@@ -206,6 +228,7 @@ export class NewKitComponent {
     'layer1Color': '#FFFFFF',
     'layer2Color': '#FFFFFF',
     'layer3Color': '#FFFFFF',
+    'sport': 'football',
   };
   kit = {...this.kitInit};
   templates = [];
@@ -301,6 +324,7 @@ export class NewKitComponent {
   }
 
   public setLayers() {
+    console.log('set layers', this.kit)
     setTimeout(() => {
       this.print(this.kit);
     }, 100);
@@ -324,7 +348,15 @@ export class NewKitComponent {
   private draw(ctx, colors) {
     this.drawBorder(ctx, `base${this.templateBase}`);
     this.drawPixels(ctx, `base${this.templateBase}`, colors);
-    this.drawPixels(ctx, 'jersey', this.kit['jersey']);
+    if (this.kit['sport'] === 'football') {
+      this.drawPixels(ctx, 'jerseyFootball', this.kit['jersey']);
+    } else if (this.kit['sport'] === 'basketball') {
+      this.drawPixels(ctx, 'jerseyBasket', this.kit['jersey']);
+    }
+    if (this.kit['sport'] === 'basketball') {
+      this.kit['pants'] = this.kit['jersey'];
+      this.kit['socks'] = '#FFFFFFF';
+    }
     this.drawPixels(ctx, 'pants', this.kit['pants']);
     this.drawPixels(ctx, 'socks', this.kit['socks']);
 
@@ -387,6 +419,7 @@ export class NewKitComponent {
       size,
     } = this.config;
     let currentTemplate = [];
+    console.log(template)
 
     for (let index in templates) {
       if (templates[index].id === template) {
@@ -582,7 +615,8 @@ export class NewKitComponent {
       layer3: this.kit.layer3,
       layer1Color: this.kit.layer1Color,
       layer2Color: this.kit.layer2Color,
-      layer3Color: this.kit.layer3Color
+      layer3Color: this.kit.layer3Color,
+      sport: this.kit.sport
     };
     this.loading = true;
     this.kit = kit;

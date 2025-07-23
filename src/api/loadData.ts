@@ -98,7 +98,8 @@ const getLatestKits = async () => {
 const getTemplates = async () => {
   const { data, error } = await supabase
   .from('templates')
-  .select('*');
+  .select('*')
+  .order('id', { ascending: true });
 
   return data || error;
 }

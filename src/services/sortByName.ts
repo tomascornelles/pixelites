@@ -1,5 +1,8 @@
 export default function sortByName (kits) {
-  const names = ['Home', 'Home alt', 'Away', 'Third', 'Fourth', 'Special'];
+  console.log(kits)
+  const names = (kits[0].sport === "fottball")
+    ? ['Home', 'Home alt', 'Away', 'Third', 'Fourth', 'Special']
+    : ['Asociation', 'Icon','Statement', 'City', 'Classic', 'Special'];
   const kitsSorted = [];
   for (let name in names) {
     for (let kit in kits) {

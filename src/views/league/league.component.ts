@@ -94,7 +94,7 @@ export class LeagueComponent {
 
         for (let kit in kits) {
           this.leagueId = kits[kit]['competition'];
-          if (kits[kit]['name'] === 'Home') {
+          if (kits[kit]['name'] === 'Home' || kits[kit]['name'] === 'Icon') {
             this.kits.push(kits[kit]);
           }
           if (!this.years.includes(kits[kit]['year'])) {

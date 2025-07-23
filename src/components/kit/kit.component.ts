@@ -12,6 +12,7 @@ type Kit = {
   layer3: [string, string]
   teamSlug: string
   competitionSlug: string
+  sport: string
 }
 
 @Component({
@@ -120,7 +121,11 @@ export class KitComponent {
   private draw(ctx, colors) {
     this.drawBorder(ctx, `base${this.templateBase}`);
     this.drawPixels(ctx, `base${this.templateBase}`, colors);
-    this.drawPixels(ctx, 'jersey', this.layers['jersey']);
+    if (this.layers['sport'] === 'football') {
+      this.drawPixels(ctx, 'jerseyFootball', this.layers['jersey']);
+    } else if (this.layers['sport'] === 'basketball') {
+      this.drawPixels(ctx, 'jerseyBasket', this.layers['jersey']);
+    }
     this.drawPixels(ctx, 'pants', this.layers['pants']);
     this.drawPixels(ctx, 'socks', this.layers['socks']);
 
