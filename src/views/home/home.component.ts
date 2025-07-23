@@ -13,7 +13,7 @@ import { getStats } from '@api/getStats';
       <div>
         <h2>Welcome</h2>
         <p>
-          Do you remember those games of yesteryear where in a few pixels we saw all the soccer teams in the world?
+          Do you remember those games of yesteryear where in a few pixels we saw all the soccer teams in the world? Now also NBA too.
         </p>
         <p>
           With Pixelites we try to achieve that minimalist experience with just 6x8 pixels to differentiate the colors of each team, and even the evolution of their kits.
