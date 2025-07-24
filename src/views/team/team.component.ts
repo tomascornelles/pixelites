@@ -157,9 +157,7 @@ export class TeamComponent {
         }
 
         this.loading = false
-        console.log(this.kits);
         this.kits = sortByName(this.kits);
-        console.log(this.kits);
       })
     });
 
